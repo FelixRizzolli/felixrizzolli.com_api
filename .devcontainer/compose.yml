@@ -1,0 +1,46 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_URI: ${DATABASE_URI}
+    env_file:
+      - path: ./.env
+        required: true
+    volumes:
+      - ../:/workspace
+      # Mount the SSH keys from the host to the container for git access
+      - ~/.ssh:/root/.ssh
+    ports:
+      - 3000:3000
+    networks:
+      - default
+    command: ['sleep', 'infinity']
+
+  database:
+    image: postgres:18
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - default
+
+volumes:
+  postgres-data:
+
+networks:
+  default:
+    name: devcontainer
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: devcontainer
