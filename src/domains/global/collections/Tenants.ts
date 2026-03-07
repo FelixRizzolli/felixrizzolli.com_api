@@ -34,11 +34,6 @@ export const Tenants: CollectionConfig = {
       required: true,
     },
     {
-      name: 'logo',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
       name: 'allowPublicRead',
       type: 'checkbox',
       admin: {
