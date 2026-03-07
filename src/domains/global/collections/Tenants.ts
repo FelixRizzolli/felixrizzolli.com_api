@@ -1,7 +1,8 @@
 import type { CollectionConfig } from 'payload';
+import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 
 export const Tenants: CollectionConfig = {
-  slug: 'tenants',
+  slug: CollectionSlug.TENANTS,
   access: {
     create: () => true,
     delete: () => true,
@@ -10,6 +11,7 @@ export const Tenants: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
+    group: CollectionGroup.GLOBAL,
   },
   fields: [
     {

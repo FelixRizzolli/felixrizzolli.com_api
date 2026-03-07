@@ -1,6 +1,7 @@
 import type { AccessArgs, CollectionConfig } from 'payload';
 
 import type { Tenant, User } from '@/payload-types';
+import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 
 const weddingTenantSlug = 'wedding';
 
@@ -79,7 +80,7 @@ const restrictToWeddingTenant = (args: AccessArgs<User>): Promise<boolean> => {
 };
 
 export const WeddingCategories: CollectionConfig = {
-  slug: 'wedding-categories',
+  slug: CollectionSlug.WEDDING_IMAGES,
   access: {
     create: restrictToWeddingTenant,
     delete: restrictToWeddingTenant,
@@ -91,6 +92,7 @@ export const WeddingCategories: CollectionConfig = {
       return !userMatchesWeddingTenant(user as Partial<User> | null | undefined);
     },
     useAsTitle: 'name',
+    group: CollectionGroup.WEDDING,
   },
   fields: [
     {

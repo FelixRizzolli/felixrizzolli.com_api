@@ -5,6 +5,7 @@ import { tenantsArrayField } from '@payloadcms/plugin-multi-tenant/fields';
 import { authenticated } from '@/access/authenticated';
 import { isSuperAdmin } from '@/access/isSuperAdmin';
 import { setCookieBasedOnDomain } from '@/domains/global/hooks/setCookieBasedOnDomain';
+import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 
 const defaultTenantArrayField = tenantsArrayField({
   tenantsArrayFieldName: 'tenants',
@@ -39,7 +40,7 @@ const defaultTenantArrayField = tenantsArrayField({
 });
 
 export const Users: CollectionConfig = {
-  slug: 'users',
+  slug: CollectionSlug.USERS,
   access: {
     admin: authenticated,
     create: authenticated,
@@ -50,6 +51,7 @@ export const Users: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'email'],
     useAsTitle: 'name',
+    group: CollectionGroup.GLOBAL,
   },
   auth: {
     depth: 1,

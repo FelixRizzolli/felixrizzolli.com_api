@@ -10,6 +10,7 @@ import { Users } from './domains/global/collections/Users';
 import { Tenants } from './domains/global/collections/Tenants';
 import { WeddingImages } from './domains/wedding/collections/WeddingImages';
 import { plugins } from './plugins';
+import { CollectionSlug } from '@/lib/constants';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -28,7 +29,7 @@ export default buildConfig({
     ...[process.env.NODE_ENV === 'development' ? 'https://studio.apollographql.com' : ''],
   ].filter(Boolean),
   admin: {
-    user: Users.slug,
+    user: CollectionSlug.USERS,
     importMap: {
       baseDir: path.resolve(dirname),
     },
