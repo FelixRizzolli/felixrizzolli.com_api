@@ -80,7 +80,7 @@ const restrictToWeddingTenant = (args: AccessArgs<User>): Promise<boolean> => {
 };
 
 export const WeddingCategories: CollectionConfig = {
-  slug: CollectionSlug.WEDDING_IMAGES,
+  slug: CollectionSlug.WEDDING_CATEGORIES,
   access: {
     create: restrictToWeddingTenant,
     delete: restrictToWeddingTenant,

@@ -29,6 +29,8 @@ export enum CollectionGroup {
 export const CollectionSlug = {
   // Global
   USERS: 'users',
+  ROLES: 'roles',
+  PERMISSIONS: 'permissions',
   TENANTS: 'tenants',
 
   // Wedding

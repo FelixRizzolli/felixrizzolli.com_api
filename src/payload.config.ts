@@ -11,6 +11,8 @@ import { Tenants } from './domains/global/collections/Tenants';
 import { WeddingImages } from './domains/wedding/collections/WeddingImages';
 import { plugins } from './plugins';
 import { CollectionSlug } from '@/lib/constants';
+import { Roles } from '@/domains/global/collections/Roles';
+import { Permissions } from '@/domains/global/collections/Permissions';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -37,6 +39,8 @@ export default buildConfig({
   collections: [
     // Global
     Users,
+    Roles,
+    Permissions,
     Tenants,
     // Wedding
     WeddingImages,

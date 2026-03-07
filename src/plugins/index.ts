@@ -10,7 +10,6 @@ export const plugins: Plugin[] = [
 
   multiTenantPlugin<Config>({
     collections: {
-      media: {},
       'wedding-images': {},
     },
     userHasAccessToAllTenants: (user) => isSuperAdmin(user),
