@@ -26,7 +26,8 @@ export default buildConfig({
     Users,
     Tenants,
     // Wedding
-    WeddingImages],
+    WeddingImages,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -36,7 +37,13 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    push: process.env.NODE_ENV !== 'production',
+    blocksAsJSON: true,
   }),
   sharp,
   plugins,
+  graphQL: {
+    disable: false,
+    disablePlaygroundInProduction: true,
+  },
 });
