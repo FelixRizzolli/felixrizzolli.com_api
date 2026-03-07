@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     tenants: Tenant;
+    'wedding-images': WeddingImage;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +80,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tenants: TenantsSelect<false> | TenantsSelect<true>;
+    'wedding-images': WeddingImagesSelect<false> | WeddingImagesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -193,6 +195,19 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-images".
+ */
+export interface WeddingImage {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  name: string;
+  filename: string;
+  'onedrive-link': string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -209,6 +224,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tenants';
         value: number | Tenant;
+      } | null)
+    | ({
+        relationTo: 'wedding-images';
+        value: number | WeddingImage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -312,6 +331,18 @@ export interface TenantsSelect<T extends boolean = true> {
   slug?: T;
   logo?: T;
   allowPublicRead?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-images_select".
+ */
+export interface WeddingImagesSelect<T extends boolean = true> {
+  tenant?: T;
+  name?: T;
+  filename?: T;
+  'onedrive-link'?: T;
   updatedAt?: T;
   createdAt?: T;
 }

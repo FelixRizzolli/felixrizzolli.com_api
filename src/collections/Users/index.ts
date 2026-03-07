@@ -1,8 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
 import { tenantsArrayField } from '@payloadcms/plugin-multi-tenant/fields'
-import { authenticated } from '../../access/authenticated'
-import { isSuperAdmin } from '../../access/isSuperAdmin'
+
+import { authenticated } from '@/access/authenticated'
+import { isSuperAdmin } from '@/access/isSuperAdmin'
 import { setCookieBasedOnDomain } from './hooks/setCookieBasedOnDomain'
 
 const defaultTenantArrayField = tenantsArrayField({
@@ -50,7 +51,9 @@ export const Users: CollectionConfig = {
     defaultColumns: ['name', 'email'],
     useAsTitle: 'name',
   },
-  auth: true,
+  auth: {
+    depth: 1,
+  },
   fields: [
     {
       admin: {
