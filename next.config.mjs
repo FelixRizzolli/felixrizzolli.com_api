@@ -1,10 +1,10 @@
-import { withPayload } from '@payloadcms/next/withPayload'
+import { withPayload } from '@payloadcms/next/withPayload';
 
-import redirects from './redirects.js'
+import redirects from './redirects.js';
 
 const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : undefined || process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
+  : process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -12,12 +12,12 @@ const nextConfig = {
   images: {
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
-        const url = new URL(item)
+        const url = new URL(item);
 
         return {
           hostname: url.hostname,
           protocol: url.protocol.replace(':', ''),
-        }
+        };
       }),
       {
         protocol: 'http',
@@ -32,9 +32,9 @@ const nextConfig = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
       '.mjs': ['.mts', '.mjs'],
-    }
+    };
 
-    return webpackConfig
+    return webpackConfig;
   },
 
   reactStrictMode: true,
@@ -63,8 +63,8 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
-}
+};
 
-export default withPayload(nextConfig, { devBundleServerPackages: false })
+export default withPayload(nextConfig, { devBundleServerPackages: false });

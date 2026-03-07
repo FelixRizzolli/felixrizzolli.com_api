@@ -1,10 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
-import { tenantsArrayField } from '@payloadcms/plugin-multi-tenant/fields'
+import { tenantsArrayField } from '@payloadcms/plugin-multi-tenant/fields';
 
-import { authenticated } from '@/access/authenticated'
-import { isSuperAdmin } from '@/access/isSuperAdmin'
-import { setCookieBasedOnDomain } from './hooks/setCookieBasedOnDomain'
+import { authenticated } from '@/access/authenticated';
+import { isSuperAdmin } from '@/access/isSuperAdmin';
+import { setCookieBasedOnDomain } from './hooks/setCookieBasedOnDomain';
 
 const defaultTenantArrayField = tenantsArrayField({
   tenantsArrayFieldName: 'tenants',
@@ -22,21 +22,21 @@ const defaultTenantArrayField = tenantsArrayField({
       required: true,
       access: {
         update: ({ req }) => {
-          const { user } = req
+          const { user } = req;
           if (!user) {
-            return false
+            return false;
           }
 
           if (isSuperAdmin(user)) {
-            return true
+            return true;
           }
 
-          return false
+          return false;
         },
       },
     },
   ],
-})
+});
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -84,4 +84,4 @@ export const Users: CollectionConfig = {
   hooks: {
     afterLogin: [setCookieBasedOnDomain],
   },
-}
+};

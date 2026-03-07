@@ -1,60 +1,60 @@
-import type { AccessArgs, CollectionConfig } from 'payload'
+import type { AccessArgs, CollectionConfig } from 'payload';
 
-import type { Tenant, User } from '@/payload-types'
+import type { Tenant, User } from '@/payload-types';
 
-const weddingTenantSlug = 'wedding'
+const weddingTenantSlug = 'wedding';
 
 const userMatchesWeddingTenant = (user: Partial<User> | null | undefined): boolean => {
   if (!user) {
-    return false
+    return false;
   }
 
   if (Array.isArray(user.roles) && user.roles.includes('super-admin')) {
-    return true
+    return true;
   }
 
-  const assignments = Array.isArray(user.tenants) ? user.tenants : []
+  const assignments = Array.isArray(user.tenants) ? user.tenants : [];
   return assignments.some(({ tenant }) => {
     if (!tenant) {
-      return false
+      return false;
     }
 
     if (typeof tenant === 'object') {
-      return tenant.slug === weddingTenantSlug
+      return tenant.slug === weddingTenantSlug;
     }
 
-    return false
-  })
-}
+    return false;
+  });
+};
 
 const resolveWeddingTenantAccess = async ({ req }: AccessArgs<User>): Promise<boolean> => {
-  const { user, payload } = req
+  const { user, payload } = req;
 
   if (userMatchesWeddingTenant(user)) {
-    return true
+    return true;
   }
 
-  const assignments = user?.tenants || []
+  const assignments = user?.tenants || [];
   if (!assignments.length) {
-    return false
+    return false;
   }
 
   const tenantIDs = assignments
     .map(({ tenant }) => {
       if (!tenant) {
-        return null
+        return null;
       }
 
       if (typeof tenant === 'object' && tenant.id) {
-        return tenant.id
+        return tenant.id;
       }
 
-      return tenant
+      return tenant;
     })
-    .filter((id): id is Tenant['id'] => Boolean(id))
+    .filter((id): id is Tenant['id'] => Boolean(id));
 
   if (!tenantIDs.length) {
-    return false
+    return false;
   }
 
   const tenantResult = await payload.find({
@@ -66,17 +66,17 @@ const resolveWeddingTenantAccess = async ({ req }: AccessArgs<User>): Promise<bo
         in: tenantIDs,
       },
     },
-  })
+  });
 
   return tenantResult.docs.some((tenantDoc) => {
-    const tenant = tenantDoc as unknown as Tenant
-    return tenant.slug === weddingTenantSlug
-  })
-}
+    const tenant = tenantDoc as unknown as Tenant;
+    return tenant.slug === weddingTenantSlug;
+  });
+};
 
 const restrictToWeddingTenant = (args: AccessArgs<User>): Promise<boolean> => {
-  return resolveWeddingTenantAccess(args)
-}
+  return resolveWeddingTenantAccess(args);
+};
 
 export const WeddingImages: CollectionConfig = {
   slug: 'wedding-images',
@@ -88,7 +88,7 @@ export const WeddingImages: CollectionConfig = {
   },
   admin: {
     hidden: ({ user }) => {
-      return !userMatchesWeddingTenant(user as Partial<User> | null | undefined)
+      return !userMatchesWeddingTenant(user as Partial<User> | null | undefined);
     },
     useAsTitle: 'name',
   },
@@ -109,4 +109,4 @@ export const WeddingImages: CollectionConfig = {
       required: true,
     },
   ],
-}
+};

@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 export const Tenants: CollectionConfig = {
   slug: 'tenants',
@@ -50,4 +50,4 @@ export const Tenants: CollectionConfig = {
       index: true,
     },
   ],
-}
+};
