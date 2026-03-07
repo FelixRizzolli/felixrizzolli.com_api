@@ -6,10 +6,9 @@ import { buildConfig } from 'payload';
 import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
-import { Users } from './collections/Users';
-import { Media } from './collections/Media';
-import { Tenants } from './collections/Tenants';
-import { WeddingImages } from './collections/Wedding/Images';
+import { Users } from './domains/global/collections/Users';
+import { Tenants } from './domains/global/collections/Tenants';
+import { WeddingImages } from './domains/wedding/collections/WeddingImages';
 import { plugins } from './plugins';
 
 const filename = fileURLToPath(import.meta.url);
@@ -22,7 +21,12 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Tenants, WeddingImages],
+  collections: [
+    // Global
+    Users,
+    Tenants,
+    // Wedding
+    WeddingImages],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
