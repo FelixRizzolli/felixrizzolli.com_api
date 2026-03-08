@@ -1,0 +1,206 @@
+/**
+ * Single source of truth for all permissions in the application.
+ *
+ * Naming convention: `domain.resource:action`
+ *   - domain   → top-level area (global, wedding, …)
+ *   - resource → camelCase collection name (users, categoryGroups, …)
+ *   - action   → create | read | update | delete
+ *
+ * Example: `wedding.categoryGroups:create`
+ */
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Actions
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const Actions = {
+  CREATE: 'create',
+  READ: 'read',
+  UPDATE: 'update',
+  DELETE: 'delete',
+} as const;
+
+export type Action = (typeof Actions)[keyof typeof Actions];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Permission Definitions
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const Permissions = {
+  // ── Global: Users ──────────────────────────────────────────────────────────
+  GLOBAL_USERS_CREATE: 'global.users:create',
+  GLOBAL_USERS_READ: 'global.users:read',
+  GLOBAL_USERS_UPDATE: 'global.users:update',
+  GLOBAL_USERS_DELETE: 'global.users:delete',
+
+  // ── Global: Roles ──────────────────────────────────────────────────────────
+  GLOBAL_ROLES_CREATE: 'global.roles:create',
+  GLOBAL_ROLES_READ: 'global.roles:read',
+  GLOBAL_ROLES_UPDATE: 'global.roles:update',
+  GLOBAL_ROLES_DELETE: 'global.roles:delete',
+
+  // ── Global: Tenants ────────────────────────────────────────────────────────
+  GLOBAL_TENANTS_CREATE: 'global.tenants:create',
+  GLOBAL_TENANTS_READ: 'global.tenants:read',
+  GLOBAL_TENANTS_UPDATE: 'global.tenants:update',
+  GLOBAL_TENANTS_DELETE: 'global.tenants:delete',
+
+  // ── Wedding: Images ────────────────────────────────────────────────────────
+  WEDDING_IMAGES_CREATE: 'wedding.images:create',
+  WEDDING_IMAGES_READ: 'wedding.images:read',
+  WEDDING_IMAGES_UPDATE: 'wedding.images:update',
+  WEDDING_IMAGES_DELETE: 'wedding.images:delete',
+
+  // ── Wedding: Categories ────────────────────────────────────────────────────
+  WEDDING_CATEGORIES_CREATE: 'wedding.categories:create',
+  WEDDING_CATEGORIES_READ: 'wedding.categories:read',
+  WEDDING_CATEGORIES_UPDATE: 'wedding.categories:update',
+  WEDDING_CATEGORIES_DELETE: 'wedding.categories:delete',
+
+  // ── Wedding: Category Groups ───────────────────────────────────────────────
+  WEDDING_CATEGORY_GROUPS_CREATE: 'wedding.categoryGroups:create',
+  WEDDING_CATEGORY_GROUPS_READ: 'wedding.categoryGroups:read',
+  WEDDING_CATEGORY_GROUPS_UPDATE: 'wedding.categoryGroups:update',
+  WEDDING_CATEGORY_GROUPS_DELETE: 'wedding.categoryGroups:delete',
+} as const;
+
+/** Union type of every permission string, e.g. `'wedding.images:create'` */
+export type Permission = (typeof Permissions)[keyof typeof Permissions];
+
+/** All permission values as a readonly array — used for seeding & validation */
+export const ALL_PERMISSIONS = Object.values(Permissions) as Permission[];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Permission Groups  (for admin UI, bulk-assignment, docs, etc.)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type PermissionGroup = {
+  /** Human-readable label shown in the admin panel */
+  label: string;
+  permissions: Permission[];
+};
+
+export const PERMISSION_GROUPS: PermissionGroup[] = [
+  {
+    label: 'Global – Users',
+    permissions: [
+      Permissions.GLOBAL_USERS_CREATE,
+      Permissions.GLOBAL_USERS_READ,
+      Permissions.GLOBAL_USERS_UPDATE,
+      Permissions.GLOBAL_USERS_DELETE,
+    ],
+  },
+  {
+    label: 'Global – Roles',
+    permissions: [
+      Permissions.GLOBAL_ROLES_CREATE,
+      Permissions.GLOBAL_ROLES_READ,
+      Permissions.GLOBAL_ROLES_UPDATE,
+      Permissions.GLOBAL_ROLES_DELETE,
+    ],
+  },
+  {
+    label: 'Global – Tenants',
+    permissions: [
+      Permissions.GLOBAL_TENANTS_CREATE,
+      Permissions.GLOBAL_TENANTS_READ,
+      Permissions.GLOBAL_TENANTS_UPDATE,
+      Permissions.GLOBAL_TENANTS_DELETE,
+    ],
+  },
+  {
+    label: 'Wedding – Images',
+    permissions: [
+      Permissions.WEDDING_IMAGES_CREATE,
+      Permissions.WEDDING_IMAGES_READ,
+      Permissions.WEDDING_IMAGES_UPDATE,
+      Permissions.WEDDING_IMAGES_DELETE,
+    ],
+  },
+  {
+    label: 'Wedding – Categories',
+    permissions: [
+      Permissions.WEDDING_CATEGORIES_CREATE,
+      Permissions.WEDDING_CATEGORIES_READ,
+      Permissions.WEDDING_CATEGORIES_UPDATE,
+      Permissions.WEDDING_CATEGORIES_DELETE,
+    ],
+  },
+  {
+    label: 'Wedding – Category Groups',
+    permissions: [
+      Permissions.WEDDING_CATEGORY_GROUPS_CREATE,
+      Permissions.WEDDING_CATEGORY_GROUPS_READ,
+      Permissions.WEDDING_CATEGORY_GROUPS_UPDATE,
+      Permissions.WEDDING_CATEGORY_GROUPS_DELETE,
+    ],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Role Presets  (consumed by the permissions seeder)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type RolePreset = {
+  name: string;
+  ident: string;
+  description: string;
+  permissions: Permission[];
+};
+
+export const ROLE_PRESETS: RolePreset[] = [
+  {
+    name: 'Super Admin',
+    ident: 'super-admin',
+    description: 'Unrestricted access to every resource.',
+    permissions: ALL_PERMISSIONS,
+  },
+  {
+    name: 'Wedding Editor',
+    ident: 'wedding-editor',
+    description: 'Full CRUD access to all Wedding resources.',
+    permissions: [
+      Permissions.WEDDING_IMAGES_CREATE,
+      Permissions.WEDDING_IMAGES_READ,
+      Permissions.WEDDING_IMAGES_UPDATE,
+      Permissions.WEDDING_IMAGES_DELETE,
+      Permissions.WEDDING_CATEGORIES_CREATE,
+      Permissions.WEDDING_CATEGORIES_READ,
+      Permissions.WEDDING_CATEGORIES_UPDATE,
+      Permissions.WEDDING_CATEGORIES_DELETE,
+      Permissions.WEDDING_CATEGORY_GROUPS_CREATE,
+      Permissions.WEDDING_CATEGORY_GROUPS_READ,
+      Permissions.WEDDING_CATEGORY_GROUPS_UPDATE,
+      Permissions.WEDDING_CATEGORY_GROUPS_DELETE,
+    ],
+  },
+  {
+    name: 'Wedding Guest',
+    ident: 'wedding-guest',
+    description: 'Read-only access to all Wedding resources.',
+    permissions: [
+      Permissions.WEDDING_IMAGES_READ,
+      Permissions.WEDDING_CATEGORIES_READ,
+      Permissions.WEDDING_CATEGORY_GROUPS_READ,
+    ],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Utility Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Narrows an unknown string to `Permission`. */
+export function isValidPermission(value: string): value is Permission {
+  return ALL_PERMISSIONS.includes(value as Permission);
+}
+
+/** Returns `true` when the user holds **every** required permission. */
+export function hasAllPermissions(userPermissions: Permission[], required: Permission[]): boolean {
+  return required.every((p) => userPermissions.includes(p));
+}
+
+/** Returns `true` when the user holds **at least one** required permission. */
+export function hasAnyPermission(userPermissions: Permission[], required: Permission[]): boolean {
+  return required.some((p) => userPermissions.includes(p));
+}

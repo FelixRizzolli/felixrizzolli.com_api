@@ -72,6 +72,8 @@ export interface Config {
     permissions: Permission;
     tenants: Tenant;
     'wedding-images': WeddingImage;
+    'wedding-categories': WeddingCategory;
+    'wedding-category-groups': WeddingCategoryGroup;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +86,8 @@ export interface Config {
     permissions: PermissionsSelect<false> | PermissionsSelect<true>;
     tenants: TenantsSelect<false> | TenantsSelect<true>;
     'wedding-images': WeddingImagesSelect<false> | WeddingImagesSelect<true>;
+    'wedding-categories': WeddingCategoriesSelect<false> | WeddingCategoriesSelect<true>;
+    'wedding-category-groups': WeddingCategoryGroupsSelect<false> | WeddingCategoryGroupsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -185,9 +189,17 @@ export interface Tenant {
  */
 export interface Role {
   id: number;
+  /**
+   * Human-readable name for the role, e.g. "Wedding Admin"
+   */
   name: string;
-  slug: string;
-  permissions?: (number | Permission)[] | null;
+  /**
+   * Immutable identifier used in access checks. Format: domain.roleName
+   */
+  ident: string;
+  /**
+   * Optional description to provide more context about this role.
+   */
   description?: {
     root: {
       type: string;
@@ -203,6 +215,10 @@ export interface Role {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Select the permissions that belong to this role.
+   */
+  permissions?: (number | Permission)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -212,23 +228,14 @@ export interface Role {
  */
 export interface Permission {
   id: number;
+  /**
+   * Human-readable label, e.g. "Wedding – Images: Create"
+   */
   name: string;
-  slug: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  /**
+   * Immutable identifier used in access checks. Format: domain.resource:action
+   */
+  ident: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -242,6 +249,27 @@ export interface WeddingImage {
   name: string;
   filename: string;
   'onedrive-link': string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-categories".
+ */
+export interface WeddingCategory {
+  id: number;
+  name: string;
+  isNavItem: boolean;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-category-groups".
+ */
+export interface WeddingCategoryGroup {
+  id: number;
+  name: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -288,6 +316,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'wedding-images';
         value: number | WeddingImage;
+      } | null)
+    | ({
+        relationTo: 'wedding-categories';
+        value: number | WeddingCategory;
+      } | null)
+    | ({
+        relationTo: 'wedding-category-groups';
+        value: number | WeddingCategoryGroup;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -368,9 +404,9 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface RolesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
-  permissions?: T;
+  ident?: T;
   description?: T;
+  permissions?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -380,8 +416,7 @@ export interface RolesSelect<T extends boolean = true> {
  */
 export interface PermissionsSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
-  description?: T;
+  ident?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -406,6 +441,25 @@ export interface WeddingImagesSelect<T extends boolean = true> {
   name?: T;
   filename?: T;
   'onedrive-link'?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-categories_select".
+ */
+export interface WeddingCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  isNavItem?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-category-groups_select".
+ */
+export interface WeddingCategoryGroupsSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
 }

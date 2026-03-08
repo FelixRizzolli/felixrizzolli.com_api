@@ -9,6 +9,8 @@ import sharp from 'sharp';
 import { Users } from './domains/global/collections/Users';
 import { Tenants } from './domains/global/collections/Tenants';
 import { WeddingImages } from './domains/wedding/collections/WeddingImages';
+import { WeddingCategories } from './domains/wedding/collections/WeddingCategories';
+import { WeddingCategoryGroups } from './domains/wedding/collections/WeddingCategoryGroups';
 import { plugins } from './plugins';
 import { CollectionSlug } from '@/lib/constants';
 import { Roles } from '@/domains/global/collections/Roles';
@@ -35,6 +37,22 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    timezones: {
+      defaultTimezone: 'Europe/Rome',
+    },
+    meta: {
+      titleSuffix: '- Felix Rizzolli Admin',
+    },
+    autoLogin:
+      process.env.NODE_ENV === 'development' &&
+      process.env.ADMIN_EMAIL &&
+      process.env.ADMIN_PASSWORD
+        ? {
+            email: process.env.ADMIN_EMAIL,
+            password: process.env.ADMIN_PASSWORD,
+            prefillOnly: true,
+          }
+        : false,
   },
   collections: [
     // Global
@@ -44,6 +62,8 @@ export default buildConfig({
     Tenants,
     // Wedding
     WeddingImages,
+    WeddingCategories,
+    WeddingCategoryGroups,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
