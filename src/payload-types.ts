@@ -246,8 +246,17 @@ export interface Permission {
 export interface WeddingImage {
   id: number;
   tenant?: (number | null) | Tenant;
-  name: string;
-  filename: string;
+  /**
+   * A unique identifier for the image, used for referencing in code.
+   */
+  ident: string;
+  /**
+   * The URL link to the image hosted on Cloudflare.
+   */
+  'cloudflare-link': string;
+  /**
+   * The URL link to the image hosted on OneDrive.
+   */
   'onedrive-link': string;
   updatedAt: string;
   createdAt: string;
@@ -258,7 +267,13 @@ export interface WeddingImage {
  */
 export interface WeddingCategory {
   id: number;
+  /**
+   * The name of the category, e.g. "Church", "Aperitivo", "Firefighters", etc.
+   */
   name: string;
+  /**
+   * If checked, this category will be shown in the navigation menu.
+   */
   isNavItem: boolean;
   updatedAt: string;
   createdAt: string;
@@ -269,6 +284,9 @@ export interface WeddingCategory {
  */
 export interface WeddingCategoryGroup {
   id: number;
+  /**
+   * Name of the category group, e.g. "Location", "Association", "Group", etc.
+   */
   name: string;
   updatedAt: string;
   createdAt: string;
@@ -438,8 +456,8 @@ export interface TenantsSelect<T extends boolean = true> {
  */
 export interface WeddingImagesSelect<T extends boolean = true> {
   tenant?: T;
-  name?: T;
-  filename?: T;
+  ident?: T;
+  'cloudflare-link'?: T;
   'onedrive-link'?: T;
   updatedAt?: T;
   createdAt?: T;

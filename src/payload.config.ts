@@ -1,4 +1,7 @@
 // storage-adapter-import-placeholder
+import { en } from '@payloadcms/translations/languages/en';
+import { de } from '@payloadcms/translations/languages/de';
+import { it } from '@payloadcms/translations/languages/it';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
@@ -32,6 +35,10 @@ export default buildConfig({
     process.env.WEDDING_URL || '',
     ...[process.env.NODE_ENV === 'development' ? 'https://studio.apollographql.com' : ''],
   ].filter(Boolean),
+  i18n: {
+    supportedLanguages: { en, de, it },
+    fallbackLanguage: 'en',
+  },
   admin: {
     user: CollectionSlug.USERS,
     importMap: {

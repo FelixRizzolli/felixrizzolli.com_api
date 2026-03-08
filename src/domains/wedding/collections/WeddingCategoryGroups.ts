@@ -99,6 +99,18 @@ export const WeddingCategoryGroups: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
+      label: {
+        en: 'Category Group Name',
+        de: 'Kategoriengruppenname',
+        it: 'Nome del gruppo di categorie',
+      },
+      admin: {
+        description: {
+          en: 'Name of the category group, e.g. "Location", "Association", "Group", etc.',
+          de: 'Name der Kategoriengruppe, z.B. "Ort", "Verein", "Gruppe", etc.',
+          it: 'Nome del gruppo di categorie, ad esempio "Luogo", "Associazione", "Gruppo", ecc.',
+        },
+      },
     },
   ],
 };
