@@ -16,6 +16,9 @@ export const InvitationTokenField = (props: any) => {
     setValue(token);
   };
 
+  // show the Generate button only when there's no token set
+  const hasValue = !!`${value || ''}`.trim();
+
   return (
     <div className="field-type row">
       <div>
@@ -29,9 +32,11 @@ export const InvitationTokenField = (props: any) => {
         />
       </div>
       <div>
-        <Button buttonStyle="secondary" size="medium" onClick={handleGenerate} type="button">
-          Generate
-        </Button>
+        {!hasValue && (
+          <Button buttonStyle="secondary" size="medium" onClick={handleGenerate} type="button">
+            Generate
+          </Button>
+        )}
       </div>
     </div>
   );
