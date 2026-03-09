@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
 import { requirePermission } from '@/access/hasPermission';
-import { setCookieBasedOnDomain } from '@/domains/global/hooks/setCookieBasedOnDomain';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 import { Permissions } from '@/lib/permissions';
 
@@ -47,7 +46,4 @@ export const Users: CollectionConfig = {
     },
   ],
   timestamps: true,
-  hooks: {
-    afterLogin: [setCookieBasedOnDomain],
-  },
 };
