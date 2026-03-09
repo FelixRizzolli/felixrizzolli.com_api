@@ -70,10 +70,10 @@ export interface Config {
     users: User;
     roles: Role;
     permissions: Permission;
-    tenants: Tenant;
     'wedding-images': WeddingImage;
     'wedding-categories': WeddingCategory;
     'wedding-category-groups': WeddingCategoryGroup;
+    'wedding-issues': WeddingIssue;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,10 +84,10 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     roles: RolesSelect<false> | RolesSelect<true>;
     permissions: PermissionsSelect<false> | PermissionsSelect<true>;
-    tenants: TenantsSelect<false> | TenantsSelect<true>;
     'wedding-images': WeddingImagesSelect<false> | WeddingImagesSelect<true>;
     'wedding-categories': WeddingCategoriesSelect<false> | WeddingCategoriesSelect<true>;
     'wedding-category-groups': WeddingCategoryGroupsSelect<false> | WeddingCategoryGroupsSelect<true>;
+    'wedding-issues': WeddingIssuesSelect<false> | WeddingIssuesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -133,15 +133,18 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
-  roles?: ('super-admin' | 'user')[] | null;
-  name?: string | null;
-  tenants?:
-    | {
-        tenant: number | Tenant;
-        roles: ('tenant-admin' | 'tenant-viewer')[];
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Unique username for the user. Can be used for login and identification.
+   */
+  username: string;
+  /**
+   * Assign one or more roles to this user. Permissions are derived from the assigned roles.
+   */
+  roles?: (number | Role)[] | null;
+  /**
+   * One-time invitation token for user registration. Generate and share with the user.
+   */
+  invitationToken?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -160,28 +163,6 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tenants".
- */
-export interface Tenant {
-  id: number;
-  name: string;
-  /**
-   * Used for domain-based tenant handling
-   */
-  domain?: string | null;
-  /**
-   * Used for url paths, example: /tenant-slug/page-slug
-   */
-  slug: string;
-  /**
-   * If checked, logging in is not required to read. Useful for building public pages.
-   */
-  allowPublicRead?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -245,7 +226,6 @@ export interface Permission {
  */
 export interface WeddingImage {
   id: number;
-  tenant?: (number | null) | Tenant;
   /**
    * A unique identifier for the image, used for referencing in code.
    */
@@ -293,6 +273,24 @@ export interface WeddingCategoryGroup {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-issues".
+ */
+export interface WeddingIssue {
+  id: number;
+  /**
+   * The title of the issue, e.g. "Parking", "Accommodation", "Transportation", etc.
+   */
+  title: string;
+  /**
+   * The unique identifier of the corresponding GitHub issue, used for syncing data between Payload and GitHub.
+   */
+  githubIssueId: string;
+  category: 'enhancement' | 'bug' | 'question';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -328,10 +326,6 @@ export interface PayloadLockedDocument {
         value: number | Permission;
       } | null)
     | ({
-        relationTo: 'tenants';
-        value: number | Tenant;
-      } | null)
-    | ({
         relationTo: 'wedding-images';
         value: number | WeddingImage;
       } | null)
@@ -342,6 +336,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'wedding-category-groups';
         value: number | WeddingCategoryGroup;
+      } | null)
+    | ({
+        relationTo: 'wedding-issues';
+        value: number | WeddingIssue;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -390,15 +388,9 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  username?: T;
   roles?: T;
-  name?: T;
-  tenants?:
-    | T
-    | {
-        tenant?: T;
-        roles?: T;
-        id?: T;
-      };
+  invitationToken?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -440,22 +432,9 @@ export interface PermissionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tenants_select".
- */
-export interface TenantsSelect<T extends boolean = true> {
-  name?: T;
-  domain?: T;
-  slug?: T;
-  allowPublicRead?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "wedding-images_select".
  */
 export interface WeddingImagesSelect<T extends boolean = true> {
-  tenant?: T;
   ident?: T;
   'cloudflare-link'?: T;
   'onedrive-link'?: T;
@@ -478,6 +457,17 @@ export interface WeddingCategoriesSelect<T extends boolean = true> {
  */
 export interface WeddingCategoryGroupsSelect<T extends boolean = true> {
   name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-issues_select".
+ */
+export interface WeddingIssuesSelect<T extends boolean = true> {
+  title?: T;
+  githubIssueId?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
