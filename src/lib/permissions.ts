@@ -62,6 +62,12 @@ export const Permissions = {
   WEDDING_CATEGORY_GROUPS_READ: 'wedding.categoryGroups:read',
   WEDDING_CATEGORY_GROUPS_UPDATE: 'wedding.categoryGroups:update',
   WEDDING_CATEGORY_GROUPS_DELETE: 'wedding.categoryGroups:delete',
+
+  // ── Wedding: Issues ────────────────────────────────────────────────────────
+  WEDDING_ISSUES_CREATE: 'wedding.issues:create',
+  WEDDING_ISSUES_READ: 'wedding.issues:read',
+  WEDDING_ISSUES_UPDATE: 'wedding.issues:update',
+  WEDDING_ISSUES_DELETE: 'wedding.issues:delete',
 } as const;
 
 /** Union type of every permission string, e.g. `'wedding.images:create'` */
@@ -135,10 +141,19 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
       Permissions.WEDDING_CATEGORY_GROUPS_DELETE,
     ],
   },
+  {
+    label: 'Wedding – Issues',
+    permissions: [
+      Permissions.WEDDING_ISSUES_CREATE,
+      Permissions.WEDDING_ISSUES_READ,
+      Permissions.WEDDING_ISSUES_UPDATE,
+      Permissions.WEDDING_ISSUES_DELETE,
+    ],
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Role Presets  (consumed by the permissions seeder)
+// Role Presets  (used by the seeder to create default roles)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type RolePreset = {
@@ -172,6 +187,10 @@ export const ROLE_PRESETS: RolePreset[] = [
       Permissions.WEDDING_CATEGORY_GROUPS_READ,
       Permissions.WEDDING_CATEGORY_GROUPS_UPDATE,
       Permissions.WEDDING_CATEGORY_GROUPS_DELETE,
+      Permissions.WEDDING_ISSUES_CREATE,
+      Permissions.WEDDING_ISSUES_READ,
+      Permissions.WEDDING_ISSUES_UPDATE,
+      Permissions.WEDDING_ISSUES_DELETE,
     ],
   },
   {
@@ -182,6 +201,7 @@ export const ROLE_PRESETS: RolePreset[] = [
       Permissions.WEDDING_IMAGES_READ,
       Permissions.WEDDING_CATEGORIES_READ,
       Permissions.WEDDING_CATEGORY_GROUPS_READ,
+      Permissions.WEDDING_ISSUES_READ,
     ],
   },
 ];

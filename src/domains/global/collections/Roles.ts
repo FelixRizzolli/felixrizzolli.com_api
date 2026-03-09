@@ -1,10 +1,18 @@
 import type { CollectionConfig } from 'payload';
 
+import { requirePermission } from '@/access/hasPermission';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
+import { Permissions } from '@/lib/permissions';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 
 export const Roles: CollectionConfig = {
   slug: CollectionSlug.ROLES,
+  access: {
+    create: requirePermission(Permissions.GLOBAL_ROLES_CREATE),
+    read: requirePermission(Permissions.GLOBAL_ROLES_READ),
+    update: requirePermission(Permissions.GLOBAL_ROLES_UPDATE),
+    delete: requirePermission(Permissions.GLOBAL_ROLES_DELETE),
+  },
   admin: {
     useAsTitle: 'name',
     group: CollectionGroup.GLOBAL,

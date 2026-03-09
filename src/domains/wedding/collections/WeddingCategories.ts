@@ -1,9 +1,17 @@
 import type { CollectionConfig } from 'payload';
 
+import { requirePermission } from '@/access/hasPermission';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
+import { Permissions } from '@/lib/permissions';
 
 export const WeddingCategories: CollectionConfig = {
   slug: CollectionSlug.WEDDING_CATEGORIES,
+  access: {
+    create: requirePermission(Permissions.WEDDING_CATEGORIES_CREATE),
+    read: requirePermission(Permissions.WEDDING_CATEGORIES_READ),
+    update: requirePermission(Permissions.WEDDING_CATEGORIES_UPDATE),
+    delete: requirePermission(Permissions.WEDDING_CATEGORIES_DELETE),
+  },
   admin: {
     useAsTitle: 'name',
     group: CollectionGroup.WEDDING,

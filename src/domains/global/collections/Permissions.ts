@@ -1,8 +1,11 @@
 import type { CollectionConfig } from 'payload';
 
+import { requirePermission } from '@/access/hasPermission';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
+import { Permissions as PermissionConst } from '@/lib/permissions';
 
 /**
+ * Permissions are managed entirely through seeders — no manual creation/deletion needed.
  * Each Permission record represents a single atomic capability: one resource × one action.
  * ident format: `domain.resource:action`  e.g. `wedding.images:create`
  */
@@ -13,8 +16,8 @@ export const Permissions: CollectionConfig = {
     defaultColumns: ['name', 'ident'],
     group: CollectionGroup.GLOBAL,
   },
-  // Permissions are managed entirely through seeders — no manual creation needed.
   access: {
+    read: requirePermission(PermissionConst.GLOBAL_ROLES_READ),
     create: () => false,
     update: () => false,
     delete: () => false,

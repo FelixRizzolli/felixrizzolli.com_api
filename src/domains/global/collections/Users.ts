@@ -1,43 +1,49 @@
 import type { CollectionConfig } from 'payload';
 
-import { authenticated } from '@/access/authenticated';
+import { requirePermission } from '@/access/hasPermission';
 import { setCookieBasedOnDomain } from '@/domains/global/hooks/setCookieBasedOnDomain';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
+import { Permissions } from '@/lib/permissions';
 
 export const Users: CollectionConfig = {
   slug: CollectionSlug.USERS,
   access: {
-    admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    create: requirePermission(Permissions.GLOBAL_USERS_CREATE),
+    read: requirePermission(Permissions.GLOBAL_USERS_READ),
+    update: requirePermission(Permissions.GLOBAL_USERS_UPDATE),
+    delete: requirePermission(Permissions.GLOBAL_USERS_DELETE),
   },
   admin: {
-    defaultColumns: ['name', 'email'],
+    defaultColumns: ['username', 'email'],
     useAsTitle: 'name',
     group: CollectionGroup.GLOBAL,
   },
   auth: {
-    depth: 1,
+    // depth 2: user → roles → permissions (so hasPermission can read idents)
+    depth: 2,
   },
   fields: [
     {
-      admin: {
-        position: 'sidebar',
-      },
-      name: 'roles',
-      type: 'select',
-      defaultValue: ['user'],
-      hasMany: true,
-      options: ['super-admin', 'user'],
-      access: {
-        update: () => true,
-      },
+      name: 'username',
+      type: 'text',
     },
     {
-      name: 'name',
-      type: 'text',
+      name: 'roles',
+      type: 'relationship',
+      relationTo: CollectionSlug.ROLES,
+      hasMany: true,
+      label: {
+        en: 'Roles',
+        de: 'Rollen',
+        it: 'Ruoli',
+      },
+      admin: {
+        description: {
+          en: 'Assign one or more roles to this user. Permissions are derived from the assigned roles.',
+          de: 'Diesem Benutzer eine oder mehrere Rollen zuweisen. Berechtigungen werden aus den zugewiesenen Rollen abgeleitet.',
+          it: 'Assegna uno o più ruoli a questo utente. I permessi vengono derivati dai ruoli assegnati.',
+        },
+      },
     },
   ],
   timestamps: true,
