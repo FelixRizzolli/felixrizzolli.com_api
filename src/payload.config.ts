@@ -10,11 +10,9 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
 import { Users } from './domains/global/collections/Users';
-import { Tenants } from './domains/global/collections/Tenants';
 import { WeddingImages } from './domains/wedding/collections/WeddingImages';
 import { WeddingCategories } from './domains/wedding/collections/WeddingCategories';
 import { WeddingCategoryGroups } from './domains/wedding/collections/WeddingCategoryGroups';
-import { plugins } from './plugins';
 import { CollectionSlug } from '@/lib/constants';
 import { Roles } from '@/domains/global/collections/Roles';
 import { Permissions } from '@/domains/global/collections/Permissions';
@@ -66,7 +64,6 @@ export default buildConfig({
     Users,
     Roles,
     Permissions,
-    Tenants,
     // Wedding
     WeddingImages,
     WeddingCategories,
@@ -85,7 +82,6 @@ export default buildConfig({
     blocksAsJSON: true,
   }),
   sharp,
-  plugins,
   graphQL: {
     disable: false,
     disablePlaygroundInProduction: true,
