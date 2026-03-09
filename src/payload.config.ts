@@ -16,6 +16,7 @@ import { WeddingCategoryGroups } from './domains/wedding/collections/WeddingCate
 import { CollectionSlug } from '@/lib/constants';
 import { Roles } from '@/domains/global/collections/Roles';
 import { Permissions } from '@/domains/global/collections/Permissions';
+import { WeddingIssues } from '@/domains/wedding/collections/WeddingIssues';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -68,6 +69,7 @@ export default buildConfig({
     WeddingImages,
     WeddingCategories,
     WeddingCategoryGroups,
+    WeddingIssues,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

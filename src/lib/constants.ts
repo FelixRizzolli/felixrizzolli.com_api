@@ -37,6 +37,7 @@ export const CollectionSlug = {
   WEDDING_IMAGES: 'wedding-images',
   WEDDING_CATEGORIES: 'wedding-categories',
   WEDDING_CATEGORY_GROUPS: 'wedding-category-groups',
+  WEDDING_ISSUES: 'wedding-issues',
 } as const;
 
 export type CollectionSlug = (typeof CollectionSlug)[keyof typeof CollectionSlug];
