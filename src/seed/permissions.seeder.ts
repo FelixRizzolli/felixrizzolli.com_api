@@ -8,30 +8,38 @@ export const seed = async (payload: Payload): Promise<void> => {
 
   const results = await Promise.allSettled(
     PERMISSION_GROUPS.flatMap(({ label, permissions }) =>
-      permissions.map((ident) => {
-        // Derive a readable name from the group label and the action part of the ident.
-        // e.g. group "Wedding – Category Groups" + ident "wedding.categoryGroups:create"
-        //   → name "Wedding – Category Groups: Create"
+      permissions.map(async (ident) => {
+        const { totalDocs } = await payload.find({
+          collection: CollectionSlug.PERMISSIONS,
+          where: { ident: { equals: ident } },
+          limit: 1,
+        });
+
+        if (totalDocs > 0) return 'skipped' as const;
+
         const action = ident.split(':')[1];
         const name = `${label}: ${capitalize(action)}`;
 
-        return payload.create({
+        await payload.create({
           collection: CollectionSlug.PERMISSIONS,
           data: { name, ident },
         });
+
+        return 'created' as const;
       }),
     ),
   );
 
-  const succeeded = results.filter((r) => r.status === 'fulfilled').length;
+  const created = results.filter((r) => r.status === 'fulfilled' && r.value === 'created').length;
+  const skipped = results.filter((r) => r.status === 'fulfilled' && r.value === 'skipped').length;
   const failed = results.filter((r) => r.status === 'rejected').length;
 
   if (failed > 0) {
     payload.logger.warn(
-      `Permissions seeded: ${succeeded} created, ${failed} skipped (likely duplicates).`,
+      `Permissions seeded: ${created} created, ${skipped} skipped, ${failed} failed.`,
     );
   } else {
-    payload.logger.info(`Permissions seeded: ${succeeded} created.`);
+    payload.logger.info(`Permissions seeded: ${created} created, ${skipped} skipped.`);
   }
 };
 
