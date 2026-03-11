@@ -24,16 +24,18 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   cors: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    process.env.WEDDING_URL || '',
-    ...[process.env.NODE_ENV === 'development' ? 'https://studio.apollographql.com' : ''],
+    ...(process.env.WWW_URL ? [process.env.WWW_URL] : []),
+    ...(process.env.DOCS_URL ? [process.env.DOCS_URL] : []),
+    ...(process.env.WEDDING_URL ? [process.env.WEDDING_URL] : []),
+    ...(process.env.TRAVELING_URL ? [process.env.TRAVELING_URL] : []),
+    ...(process.env.NODE_ENV === 'development' ? ['https://studio.apollographql.com'] : []),
   ].filter(Boolean),
   csrf: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    process.env.WEDDING_URL || '',
-    ...[process.env.NODE_ENV === 'development' ? 'https://studio.apollographql.com' : ''],
+    ...(process.env.WWW_URL ? [process.env.WWW_URL] : []),
+    ...(process.env.DOCS_URL ? [process.env.DOCS_URL] : []),
+    ...(process.env.WEDDING_URL ? [process.env.WEDDING_URL] : []),
+    ...(process.env.TRAVELING_URL ? [process.env.TRAVELING_URL] : []),
+    ...(process.env.NODE_ENV === 'development' ? ['https://studio.apollographql.com'] : []),
   ].filter(Boolean),
   i18n: {
     supportedLanguages: { en, de, it },
