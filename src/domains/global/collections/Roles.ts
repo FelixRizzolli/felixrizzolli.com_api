@@ -1,17 +1,36 @@
 import type { CollectionConfig } from 'payload';
 
-import { requirePermission } from '@/access/hasPermission';
+import { hasPermission, requirePermission } from '@/access/hasPermission';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
-import { Permissions } from '@/lib/permissions';
+import { Permissions, ROLE_PRESETS } from '@/lib/permissions';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+
+/**
+ * Idents of roles that are managed exclusively by the seeder.
+ * No user — including super-admin — may create, update, or delete these roles
+ * through the API or admin panel. Their permissions are always synced by the seeder.
+ */
+const SEEDER_MANAGED_IDENTS = ROLE_PRESETS.map((r) => r.ident);
 
 export const Roles: CollectionConfig = {
   slug: CollectionSlug.ROLES,
   access: {
-    create: requirePermission(Permissions.GLOBAL_ROLES_CREATE),
+    create: ({ req, data }) => {
+      if (!hasPermission(req.user, Permissions.GLOBAL_ROLES_CREATE)) return false;
+      // Prevent shadowing a seeder-managed role ident
+      return !(data?.ident && SEEDER_MANAGED_IDENTS.includes(data.ident));
+    },
     read: requirePermission(Permissions.GLOBAL_ROLES_READ),
-    update: requirePermission(Permissions.GLOBAL_ROLES_UPDATE),
-    delete: requirePermission(Permissions.GLOBAL_ROLES_DELETE),
+    update: ({ req }) => {
+      if (!hasPermission(req.user, Permissions.GLOBAL_ROLES_UPDATE)) return false;
+      // Seeder-managed roles are immutable — block updates for all users
+      return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
+    },
+    delete: ({ req }) => {
+      if (!hasPermission(req.user, Permissions.GLOBAL_ROLES_DELETE)) return false;
+      // Seeder-managed roles are immutable — block deletes for all users
+      return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
+    },
   },
   admin: {
     useAsTitle: 'name',
