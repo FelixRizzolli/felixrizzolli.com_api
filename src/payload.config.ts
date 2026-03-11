@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 
 import { Users } from './domains/global/collections/Users';
+import { loginWithInvitationTokenMutation } from '@/domains/wedding/graphql/loginWithInvitationToken';
 import { WeddingImages } from './domains/wedding/collections/WeddingImages';
 import { WeddingCategories } from './domains/wedding/collections/WeddingCategories';
 import { WeddingCategoryGroups } from './domains/wedding/collections/WeddingCategoryGroups';
@@ -87,5 +88,9 @@ export default buildConfig({
   graphQL: {
     disable: false,
     disablePlaygroundInProduction: true,
+    mutations: (_graphQL, { Mutation }) => ({
+      ...Mutation.fields,
+      loginWithInvitationToken: loginWithInvitationTokenMutation,
+    }),
   },
 });
