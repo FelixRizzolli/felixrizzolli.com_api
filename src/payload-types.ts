@@ -233,11 +233,11 @@ export interface WeddingImage {
   /**
    * The URL link to the image hosted on Cloudflare.
    */
-  'cloudflare-link': string;
+  cloudflareLink?: string | null;
   /**
    * The URL link to the image hosted on OneDrive.
    */
-  'onedrive-link': string;
+  onedriveLink?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -436,8 +436,8 @@ export interface PermissionsSelect<T extends boolean = true> {
  */
 export interface WeddingImagesSelect<T extends boolean = true> {
   ident?: T;
-  'cloudflare-link'?: T;
-  'onedrive-link'?: T;
+  cloudflareLink?: T;
+  onedriveLink?: T;
   updatedAt?: T;
   createdAt?: T;
 }

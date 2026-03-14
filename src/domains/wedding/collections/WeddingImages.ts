@@ -36,9 +36,9 @@ export const WeddingImages: CollectionConfig = {
       },
     },
     {
-      name: 'cloudflare-link',
+      name: 'cloudflareLink',
       type: 'text',
-      required: true,
+      required: false,
       unique: true,
       label: {
         en: 'Cloudflare Link',
@@ -54,9 +54,9 @@ export const WeddingImages: CollectionConfig = {
       },
     },
     {
-      name: 'onedrive-link',
+      name: 'onedriveLink',
       type: 'text',
-      required: true,
+      required: false,
       unique: true,
       label: {
         en: 'OneDrive Link',
