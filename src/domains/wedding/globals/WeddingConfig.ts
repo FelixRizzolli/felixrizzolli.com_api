@@ -3,11 +3,11 @@ import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 import { requirePermission } from '@/lib/access';
 import { Permissions } from '@/lib/permissions';
 
-export const WeddingGlobals: GlobalConfig = {
-  slug: CollectionSlug.WEDDING_GLOBALS,
+export const WeddingConfig: GlobalConfig = {
+  slug: CollectionSlug.WEDDING_CONFIG,
   access: {
-    read: requirePermission(Permissions.WEDDING_GLOBALS_READ),
-    update: requirePermission(Permissions.WEDDING_GLOBALS_UPDATE),
+    read: requirePermission(Permissions.WEDDING_CONFIG_READ),
+    update: requirePermission(Permissions.WEDDING_CONFIG_UPDATE),
   },
   admin: {
     group: CollectionGroup.WEDDING,

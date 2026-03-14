@@ -45,9 +45,9 @@ export const Permissions = {
   GLOBAL_TENANTS_UPDATE: 'global.tenants:update',
   GLOBAL_TENANTS_DELETE: 'global.tenants:delete',
 
-  // ── Wedding: Globals ───────────────────────────────────────────────────────
-  WEDDING_GLOBALS_READ: 'wedding.globals:read',
-  WEDDING_GLOBALS_UPDATE: 'wedding.globals:update',
+  // ── Wedding: Config ────────────────────────────────────────────────────────
+  WEDDING_CONFIG_READ: 'wedding.config:read',
+  WEDDING_CONFIG_UPDATE: 'wedding.config:update',
 
   // ── Wedding: Images ────────────────────────────────────────────────────────
   WEDDING_IMAGES_CREATE: 'wedding.images:create',
@@ -119,8 +119,8 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
     ],
   },
   {
-    label: 'Wedding - Globals',
-    permissions: [Permissions.WEDDING_GLOBALS_READ, Permissions.WEDDING_GLOBALS_UPDATE],
+    label: 'Wedding - Config',
+    permissions: [Permissions.WEDDING_CONFIG_READ, Permissions.WEDDING_CONFIG_UPDATE],
   },
   {
     label: 'Wedding – Images',

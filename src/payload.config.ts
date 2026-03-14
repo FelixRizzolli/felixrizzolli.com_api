@@ -18,7 +18,7 @@ import { CollectionSlug } from '@/lib/constants';
 import { Roles } from '@/domains/global/collections/Roles';
 import { Permissions } from '@/domains/global/collections/Permissions';
 import { WeddingIssues } from '@/domains/wedding/collections/WeddingIssues';
-import { WeddingGlobals } from '@/domains/wedding/globals/WeddingGlobals';
+import { WeddingConfig } from '@/domains/wedding/globals/WeddingConfig';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -78,7 +78,7 @@ export default buildConfig({
   globals: [
     // Global
     // Wedding
-    WeddingGlobals,
+    WeddingConfig,
   ],
   editor: lexicalEditor(),
   secret: process.env.API_SECRET || '',

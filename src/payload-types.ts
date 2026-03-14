@@ -98,10 +98,10 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
-    'wedding-globals': WeddingGlobal;
+    'wedding-config': WeddingConfig;
   };
   globalsSelect: {
-    'wedding-globals': WeddingGlobalsSelect<false> | WeddingGlobalsSelect<true>;
+    'wedding-config': WeddingConfigSelect<false> | WeddingConfigSelect<true>;
   };
   locale: null;
   widgets: {
@@ -517,9 +517,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "wedding-globals".
+ * via the `definition` "wedding-config".
  */
-export interface WeddingGlobal {
+export interface WeddingConfig {
   id: number;
   loginImage?: (number | null) | WeddingImage;
   updatedAt?: string | null;
@@ -527,9 +527,9 @@ export interface WeddingGlobal {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "wedding-globals_select".
+ * via the `definition` "wedding-config_select".
  */
-export interface WeddingGlobalsSelect<T extends boolean = true> {
+export interface WeddingConfigSelect<T extends boolean = true> {
   loginImage?: T;
   updatedAt?: T;
   createdAt?: T;
