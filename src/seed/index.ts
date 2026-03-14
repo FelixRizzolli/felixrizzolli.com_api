@@ -5,6 +5,7 @@ import config from '@payload-config';
 import { seed as seedPermissions } from './permissions.seeder';
 import { seed as seedRoles } from './roles.seeder';
 import { seed as seedUsers } from './users.seeder';
+import { seed as seedWeddingImages } from './wedding-images.seeder';
 
 /**
  * Main seed entry point.
@@ -20,6 +21,7 @@ const run = async (): Promise<void> => {
     await seedPermissions(payload);
     await seedRoles(payload);
     await seedUsers(payload);
+    await seedWeddingImages(payload);
 
     payload.logger.info('✔ Database seeded successfully.');
   } catch (err) {
