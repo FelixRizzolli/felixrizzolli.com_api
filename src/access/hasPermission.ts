@@ -4,6 +4,19 @@ import type { Permission as PermissionDoc, Role, User } from '@/payload-types';
 import type { Permission } from '@/lib/permissions';
 
 /**
+ * Returns `true` when the authenticated user has a role whose `ident` is
+ * `"super-admin"`.  Works at depth 1 (roles populated as objects) — it does
+ * **not** need the nested permissions to be populated.
+ */
+export function isSuperAdmin(user: User | null | undefined): boolean {
+  if (!user?.roles?.length) return false;
+
+  return user.roles.some(
+    (roleOrId) => typeof roleOrId === 'object' && (roleOrId as Role).ident === 'super-admin',
+  );
+}
+
+/**
  * Extracts every distinct permission `ident` string from a fully-populated user.
  *
  * Payload populates `user.roles` with `Role` objects (depth ≥ 1) and each
@@ -49,6 +62,7 @@ export function hasPermission(user: User | null | undefined, permission: Permiss
 
 /**
  * Factory that produces a Payload `Access` function for a single permission.
+ * Super-admins always pass regardless of populated permissions depth.
  *
  * Usage:
  * ```ts
@@ -58,5 +72,6 @@ export function hasPermission(user: User | null | undefined, permission: Permiss
  * ```
  */
 export function requirePermission(permission: Permission): Access {
-  return ({ req: { user } }: AccessArgs): boolean => hasPermission(user, permission);
+  return ({ req: { user } }: AccessArgs): boolean =>
+    isSuperAdmin(user) || hasPermission(user, permission);
 }
