@@ -15,6 +15,7 @@ export const WeddingImages: CollectionConfig = {
   admin: {
     useAsTitle: 'ident',
     group: CollectionGroup.WEDDING,
+    defaultColumns: ['ident', 'cloudflareLink', 'updatedAt'],
   },
   fields: [
     {
@@ -46,6 +47,9 @@ export const WeddingImages: CollectionConfig = {
         it: 'Link di Cloudflare',
       },
       admin: {
+        components: {
+          Cell: '@/domains/wedding/components/WeddingImageCell#WeddingImageCell',
+        },
         description: {
           en: 'The URL link to the image hosted on Cloudflare.',
           de: 'Der URL-Link zum Bild, das auf Cloudflare gehostet wird.',
