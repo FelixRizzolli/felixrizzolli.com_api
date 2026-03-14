@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { hasPermission, requirePermission } from '@/access/hasPermission';
+import { access, requirePermission } from '@/lib/access';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 import { Permissions, ROLE_PRESETS } from '@/lib/permissions';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
@@ -16,18 +16,18 @@ export const Roles: CollectionConfig = {
   slug: CollectionSlug.ROLES,
   access: {
     create: ({ req, data }) => {
-      if (!hasPermission(req.user, Permissions.GLOBAL_ROLES_CREATE)) return false;
+      if (!access(req.user, Permissions.GLOBAL_ROLES_CREATE)) return false;
       // Prevent shadowing a seeder-managed role ident
       return !(data?.ident && SEEDER_MANAGED_IDENTS.includes(data.ident));
     },
     read: requirePermission(Permissions.GLOBAL_ROLES_READ),
     update: ({ req }) => {
-      if (!hasPermission(req.user, Permissions.GLOBAL_ROLES_UPDATE)) return false;
+      if (!access(req.user, Permissions.GLOBAL_ROLES_UPDATE)) return false;
       // Seeder-managed roles are immutable — block updates for all users
       return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
     },
     delete: ({ req }) => {
-      if (!hasPermission(req.user, Permissions.GLOBAL_ROLES_DELETE)) return false;
+      if (!access(req.user, Permissions.GLOBAL_ROLES_DELETE)) return false;
       // Seeder-managed roles are immutable — block deletes for all users
       return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
     },

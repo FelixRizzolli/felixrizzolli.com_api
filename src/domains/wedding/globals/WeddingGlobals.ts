@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
-import { requirePermission } from '@/access/hasPermission';
+import { requirePermission } from '@/lib/access';
 import { Permissions } from '@/lib/permissions';
 
 export const WeddingGlobals: GlobalConfig = {

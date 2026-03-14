@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { requirePermission } from '@/access/hasPermission';
+import { requirePermission } from '@/lib/access';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 import { Permissions as PermissionConst } from '@/lib/permissions';
 

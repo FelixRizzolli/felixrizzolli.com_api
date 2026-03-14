@@ -53,10 +53,10 @@ export function getUserPermissions(user: User | null | undefined): Permission[] 
  *
  * Usage inside a collection access function:
  * ```ts
- * create: ({ req: { user } }) => hasPermission(user, Permissions.WEDDING_IMAGES_CREATE),
+ * create: ({ req: { user } }) => access(user, Permissions.WEDDING_IMAGES_CREATE),
  * ```
  */
-export function hasPermission(user: User | null | undefined, permission: Permission): boolean {
+export function access(user: User | null | undefined, permission: Permission): boolean {
   return getUserPermissions(user).includes(permission);
 }
 
@@ -72,6 +72,5 @@ export function hasPermission(user: User | null | undefined, permission: Permiss
  * ```
  */
 export function requirePermission(permission: Permission): Access {
-  return ({ req: { user } }: AccessArgs): boolean =>
-    isSuperAdmin(user) || hasPermission(user, permission);
+  return ({ req: { user } }: AccessArgs): boolean => isSuperAdmin(user) || access(user, permission);
 }

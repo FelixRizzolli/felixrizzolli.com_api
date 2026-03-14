@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { getUserPermissions, hasPermission, requirePermission, isSuperAdmin } from '@/access/hasPermission';
+import { getUserPermissions, access, requirePermission, isSuperAdmin } from '@/lib/access';
 import { Permissions } from '@/lib/permissions';
 import type { User, Role, Permission as PermissionDoc } from '@/payload-types';
 
@@ -18,11 +18,7 @@ const makePermission = (ident: string, id = 1): PermissionDoc => ({
 });
 
 /** Builds a minimal Role stub with optional populated permissions. */
-const makeRole = (
-  ident: string,
-  permissions: (number | PermissionDoc)[] = [],
-  id = 1,
-): Role => ({
+const makeRole = (ident: string, permissions: (number | PermissionDoc)[] = [], id = 1): Role => ({
   id,
   name: ident,
   ident,
@@ -100,30 +96,33 @@ describe('getUserPermissions', () => {
     const user = makeUser([role1, role2]);
 
     expect(getUserPermissions(user)).toEqual(
-      expect.arrayContaining([Permissions.WEDDING_IMAGES_READ, Permissions.WEDDING_CATEGORIES_READ]),
+      expect.arrayContaining([
+        Permissions.WEDDING_IMAGES_READ,
+        Permissions.WEDDING_CATEGORIES_READ,
+      ]),
     );
   });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// hasPermission
+// access
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe('hasPermission', () => {
+describe('access', () => {
   it('returns false for null user', () => {
-    expect(hasPermission(null, Permissions.WEDDING_IMAGES_READ)).toBe(false);
+    expect(access(null, Permissions.WEDDING_IMAGES_READ)).toBe(false);
   });
 
   it('returns true when user has the required permission', () => {
     const perm = makePermission(Permissions.WEDDING_IMAGES_READ);
     const user = makeUser([makeRole('editor', [perm])]);
-    expect(hasPermission(user, Permissions.WEDDING_IMAGES_READ)).toBe(true);
+    expect(access(user, Permissions.WEDDING_IMAGES_READ)).toBe(true);
   });
 
   it('returns false when user is missing the required permission', () => {
     const perm = makePermission(Permissions.WEDDING_IMAGES_CREATE);
     const user = makeUser([makeRole('editor', [perm])]);
-    expect(hasPermission(user, Permissions.WEDDING_IMAGES_READ)).toBe(false);
+    expect(access(user, Permissions.WEDDING_IMAGES_READ)).toBe(false);
   });
 });
 
@@ -169,15 +168,16 @@ describe('isSuperAdmin', () => {
 describe('requirePermission', () => {
   const accessFn = requirePermission(Permissions.WEDDING_IMAGES_READ);
 
-  const makeArgs = (user: User | null) =>
-    ({ req: { user } }) as any;
+  const makeArgs = (user: User | null) => ({ req: { user } }) as any;
 
   it('returns false when user is null', () => {
     expect(accessFn(makeArgs(null))).toBe(false);
   });
 
   it('returns false when user lacks the permission', () => {
-    const user = makeUser([makeRole('editor', [makePermission(Permissions.WEDDING_IMAGES_CREATE)])]);
+    const user = makeUser([
+      makeRole('editor', [makePermission(Permissions.WEDDING_IMAGES_CREATE)]),
+    ]);
     expect(accessFn(makeArgs(user))).toBe(false);
   });
 
@@ -193,4 +193,3 @@ describe('requirePermission', () => {
     expect(accessFn(makeArgs(user))).toBe(true);
   });
 });
-

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { requirePermission } from '@/access/hasPermission';
+import { requirePermission } from '@/lib/access';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 import { Permissions } from '@/lib/permissions';
 
@@ -18,7 +18,7 @@ export const Users: CollectionConfig = {
     group: CollectionGroup.GLOBAL,
   },
   auth: {
-    // depth 2: user → roles → permissions (so hasPermission can read idents)
+    // depth 2: user → roles → permissions (so access can read idents)
     depth: 2,
   },
   fields: [
