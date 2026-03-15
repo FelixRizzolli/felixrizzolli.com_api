@@ -24,6 +24,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
+  serverURL: process.env.API_URL || 'http://localhost:3000',
   cors: [
     ...(process.env.WWW_URL ? [process.env.WWW_URL] : []),
     ...(process.env.DOCS_URL ? [process.env.DOCS_URL] : []),
