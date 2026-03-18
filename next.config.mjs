@@ -9,24 +9,7 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your Next.js config here
-  images: {
-    remotePatterns: [
-      ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
-        const url = new URL(item);
-
-        return {
-          hostname: url.hostname,
-          protocol: url.protocol.replace(':', ''),
-        };
-      }),
-      {
-        protocol: 'http',
-        hostname: '*.next',
-        port: '3000',
-      },
-    ],
-  },
-
+  output: 'standalone',
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
@@ -46,22 +29,9 @@ const nextConfig = {
         source: '/api/:path*',
         destination: '/api/:path*',
       },
-
       {
         source: '/admin/:path*',
         destination: '/admin/:path*',
-      },
-
-      {
-        source: '/:path*',
-        destination: '/:tenant/:path*',
-
-        has: [
-          {
-            type: 'host',
-            value: '(?<tenant>.*)',
-          },
-        ],
       },
     ];
   },
