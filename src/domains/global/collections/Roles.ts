@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import { access, isSuperAdmin, requirePermission } from '@/lib/access';
+import { access, getPopulatedUser, isSuperAdmin, requirePermission } from '@/lib/access';
 import { CollectionGroup, CollectionSlug } from '@/lib/constants';
 import { Permissions, ROLE_PRESETS } from '@/lib/permissions';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
@@ -15,22 +15,25 @@ const SEEDER_MANAGED_IDENTS = ROLE_PRESETS.map((r) => r.ident);
 export const Roles: CollectionConfig = {
   slug: CollectionSlug.ROLES,
   access: {
-    create: ({ req, data }) => {
+    create: async ({ req, data }) => {
+      const user = await getPopulatedUser(req);
       // Super-admins bypass the permission check but still cannot shadow seeder-managed idents.
-      if (!isSuperAdmin(req.user) && !access(req.user, Permissions.GLOBAL_ROLES_CREATE))
+      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_CREATE))
         return false;
       // Prevent shadowing a seeder-managed role ident (applies to everyone)
       return !(data?.ident && SEEDER_MANAGED_IDENTS.includes(data.ident));
     },
     read: requirePermission(Permissions.GLOBAL_ROLES_READ),
-    update: ({ req }) => {
-      if (!isSuperAdmin(req.user) && !access(req.user, Permissions.GLOBAL_ROLES_UPDATE))
+    update: async ({ req }) => {
+      const user = await getPopulatedUser(req);
+      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_UPDATE))
         return false;
       // Seeder-managed roles are immutable — block updates for all users
       return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
     },
-    delete: ({ req }) => {
-      if (!isSuperAdmin(req.user) && !access(req.user, Permissions.GLOBAL_ROLES_DELETE))
+    delete: async ({ req }) => {
+      const user = await getPopulatedUser(req);
+      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_DELETE))
         return false;
       // Seeder-managed roles are immutable — block deletes for all users
       return { ident: { not_in: SEEDER_MANAGED_IDENTS } };

@@ -20,6 +20,8 @@ export const Users: CollectionConfig = {
   auth: {
     // depth 2: user → roles → permissions (so access can read idents)
     depth: 2,
+    // 30 days — guests log in once for the wedding and should stay authenticated
+    tokenExpiration: 60 * 60 * 24 * 30,
   },
   fields: [
     {
