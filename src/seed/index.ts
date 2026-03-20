@@ -1,6 +1,4 @@
-import { getPayload } from 'payload';
-
-import config from '@payload-config';
+import { Payload } from 'payload';
 
 import { seed as seedPermissions } from './permissions.seeder';
 import { seed as seedRoles } from './roles.seeder';
@@ -8,29 +6,13 @@ import { seed as seedUsers } from './users.seeder';
 import { seed as seedWeddingImages } from './wedding-images.seeder';
 
 /**
- * Main seed entry point.
- *
- * Order matters:
- *   1. Permissions must exist before roles reference them.
- *   2. The super-admin Role record must exist before the admin User is created.
+ * Runs all seeders in dependency order.
+ * Safe to call on every startup because every seeder is idempotent.
  */
-const run = async (): Promise<void> => {
-  const payload = await getPayload({ config });
-
-  try {
-    await seedPermissions(payload);
-    await seedRoles(payload);
-    await seedUsers(payload);
-    await seedWeddingImages(payload);
-
-    payload.logger.info('✔ Database seeded successfully.');
-  } catch (err) {
-    payload.logger.error('✘ Seeding failed:');
-    payload.logger.error(err);
-    process.exit(1);
-  }
-
-  process.exit(0);
+export const runSeeders = async (payload: Payload): Promise<void> => {
+  await seedPermissions(payload);
+  await seedRoles(payload);
+  await seedUsers(payload);
+  await seedWeddingImages(payload);
+  payload.logger.info('✔ Database seeded successfully.');
 };
-
-run();

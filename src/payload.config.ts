@@ -20,6 +20,7 @@ import { Permissions } from '@/domains/global/collections/Permissions';
 import { WeddingIssues } from '@/domains/wedding/collections/WeddingIssues';
 import { WeddingConfig } from '@/domains/wedding/globals/WeddingConfig';
 import { migrations } from '@/migrations';
+import { runSeeders } from '@/seed';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -95,6 +96,15 @@ export default buildConfig({
     push: process.env.NODE_ENV !== 'production',
     blocksAsJSON: true,
   }),
+  onInit: async (payload) => {
+    try {
+      await runSeeders(payload);
+    } catch (err) {
+      payload.logger.error('✘ Seeding failed on startup:');
+      payload.logger.error(err);
+      // Do NOT process.exit here — let the server continue running
+    }
+  },
   sharp,
   graphQL: {
     disable: false,
