@@ -19,6 +19,7 @@ import { Roles } from '@/domains/global/collections/Roles';
 import { Permissions } from '@/domains/global/collections/Permissions';
 import { WeddingIssues } from '@/domains/wedding/collections/WeddingIssues';
 import { WeddingConfig } from '@/domains/wedding/globals/WeddingConfig';
+import { migrations } from '@/migrations';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -87,6 +88,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    prodMigrations: migrations,
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
