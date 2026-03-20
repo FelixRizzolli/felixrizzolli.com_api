@@ -1,0 +1,16 @@
+# Build artefacts (re-created inside the container)
+.next
+node_modules
+# Local config overrides
+.env
+.env.*
+!.env.example
+# Dev tooling
+.git
+.gitignore
+*.md
+*.log
+# Test output
+coverage
+playwright-report
+test-results
