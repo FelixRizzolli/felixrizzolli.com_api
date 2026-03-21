@@ -41,7 +41,7 @@ export const InvitationTokenField = (props: any) => {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="md:grid gap-4 grid-cols-2">
       <div>
         <TextInput
           path={path}
@@ -61,8 +61,10 @@ export const InvitationTokenField = (props: any) => {
         </Button>
       </div>
       {qrValue && (
-        <div ref={qrContainerRef} className="w-max h-max">
-          <QRCodeCanvas value={qrValue} size={200} marginSize={2} />
+        <div className="flex justify-center">
+          <div ref={qrContainerRef} className="w-max h-max">
+            <QRCodeCanvas value={qrValue} size={200} marginSize={2} />
+          </div>
         </div>
       )}
     </div>
