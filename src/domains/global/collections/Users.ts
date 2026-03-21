@@ -22,6 +22,15 @@ export const Users: CollectionConfig = {
     depth: 2,
     // 30 days — guests log in once for the wedding and should stay authenticated
     tokenExpiration: 60 * 60 * 24 * 30,
+    loginWithUsername: {
+      allowEmailLogin: true,
+      requireEmail: false,
+      requireUsername: false,
+    },
+    disableLocalStrategy: {
+      enableFields: true,
+      optionalPassword: true,
+    },
   },
   fields: [
     {
@@ -34,24 +43,6 @@ export const Users: CollectionConfig = {
             it: 'Generale',
           },
           fields: [
-            {
-              name: 'username',
-              type: 'text',
-              required: true,
-              unique: true,
-              label: {
-                en: 'Username',
-                de: 'Benutzername',
-                it: 'Nome utente',
-              },
-              admin: {
-                description: {
-                  en: 'Unique username for the user. Can be used for login and identification.',
-                  de: 'Eindeutiger Benutzername für den Benutzer. Kann für die Anmeldung und Identifikation verwendet werden.',
-                  it: "Nome utente univoco per l'utente. Può essere utilizzato per l'accesso e l'identificazione.",
-                },
-              },
-            },
             {
               name: 'roles',
               type: 'relationship',
