@@ -56,9 +56,11 @@ export const InvitationTokenField = (props: any) => {
             Generate
           </Button>
         )}
-        <Button buttonStyle="secondary" size="medium" onClick={handleDownload} type="button">
-          Download QR Code (PNG)
-        </Button>
+        {qrValue && (
+          <Button buttonStyle="secondary" size="medium" onClick={handleDownload} type="button">
+            Download QR Code (PNG)
+          </Button>
+        )}
       </div>
       {qrValue && (
         <div className="flex justify-center">
