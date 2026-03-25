@@ -30,7 +30,7 @@
     "@payloadcms/ui": "3.79.1",
     "cross-env": "10.1.0",
     "dotenv": "17.3.1",
-    "graphql": "16.13.1",
+    "graphql": "16.13.2",
     "next": "16.2.0",
     "payload": "3.79.1",
     "qrcode.react": "^4.2.0",
