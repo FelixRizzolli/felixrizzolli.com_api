@@ -3,6 +3,11 @@
 import config from '@payload-config';
 import { GRAPHQL_POST, REST_OPTIONS } from '@payloadcms/next/routes';
 
-export const POST = GRAPHQL_POST(config);
+import { withGraphQLStatus } from '@/lib/graphql-handler';
+
+// Wrapped: re-emits the highest error `extensions.statusCode` as the real
+// HTTP status so clients get 403/401 instead of the spec-mandated 200.
+// If Payload regenerates this file, re-apply the withGraphQLStatus wrapper.
+export const POST = withGraphQLStatus(GRAPHQL_POST(config));
 
 export const OPTIONS = REST_OPTIONS(config);
