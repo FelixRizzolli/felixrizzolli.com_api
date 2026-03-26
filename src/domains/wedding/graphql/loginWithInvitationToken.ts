@@ -1,11 +1,10 @@
-import { randomUUID } from 'crypto';
-
 import type { GraphQLFieldConfig } from 'graphql';
 import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { getFieldsToSign, jwtSign } from 'payload';
+import { APIError, getFieldsToSign, jwtSign } from 'payload';
 import type { PayloadRequest } from 'payload';
 
-import type { User } from '@/payload-types';
+import type { WeddingUser } from '@/payload-types';
+import { CollectionSlug } from '@/lib/constants';
 
 /**
  * GraphQL field config for the `loginWithInvitationToken` wedding-domain mutation.
@@ -85,61 +84,34 @@ export const loginWithInvitationTokenMutation: GraphQLFieldConfig<
     const { username, invitationToken } = args;
     const { payload } = req;
 
-    const collectionConfig = payload.collections['users'].config;
+    const collectionConfig = payload.collections[CollectionSlug.WEDDING_USERS].config;
     const { secret } = payload;
     const tokenExpiration = collectionConfig.auth.tokenExpiration ?? 60 * 60 * 24 * 30;
 
-    // ── Step 1: Find user by username
+    // ── Step 1: Find wedding-user by username
     const user = (await payload.db.findOne({
-      collection: 'users',
+      collection: CollectionSlug.WEDDING_USERS,
       req,
       where: { username: { equals: username } },
-    })) as
-      | (User & { sessions?: { id: string; createdAt?: string | null; expiresAt: string }[] })
-      | null;
+    })) as WeddingUser | null;
 
     // ── Step 2: Validate invitation token
     if (!user || !user.invitationToken || user.invitationToken !== invitationToken) {
-      throw new Error('Invalid credentials.');
+      // APIError ensures extensions.statusCode: 403 appears in the GraphQL
+      // error body, which the withGraphQLStatus wrapper promotes to HTTP 403.
+      throw new APIError('Invalid credentials.', 403);
     }
 
-    // ── Step 3: Create a session
-    let sid: string | undefined;
-
-    if (collectionConfig.auth.useSessions) {
-      sid = randomUUID();
-      const now = new Date();
-      const expiresAt = new Date(now.getTime() + tokenExpiration * 1000);
-
-      const existingSessions = Array.isArray(user.sessions) ? user.sessions : [];
-      const validSessions = existingSessions.filter((s) => new Date(s.expiresAt) > now);
-      validSessions.push({
-        id: sid,
-        createdAt: now.toISOString(),
-        expiresAt: expiresAt.toISOString(),
-      });
-
-      user.sessions = validSessions;
-      (user as any).updatedAt = null;
-
-      await payload.db.updateOne({
-        id: user.id as number,
-        collection: 'users',
-        data: user as any,
-        req,
-        returning: false,
-      });
-    }
-
-    // ── Step 4: Build JWT claims
+    // ── Step 3: Build JWT claims and sign
+    // Sessions are disabled on this collection (useSessions: false) so no
+    // server-side session is created.  The 30-day JWT expiry is sufficient
+    // for the wedding-guest use case.
     const fieldsToSign = getFieldsToSign({
       collectionConfig,
-      email: user.email ?? '',
-      user: user as Parameters<typeof getFieldsToSign>[0]['user'],
-      ...(sid ? { sid } : {}),
+      email: '',
+      user: user as unknown as Parameters<typeof getFieldsToSign>[0]['user'],
     });
 
-    // ── Step 5: Sign
     const { token, exp } = await jwtSign({
       fieldsToSign,
       secret,
