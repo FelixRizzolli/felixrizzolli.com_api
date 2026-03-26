@@ -34,6 +34,7 @@ export const CollectionSlug = {
   TENANTS: 'tenants',
 
   // Wedding
+  WEDDING_USERS: 'wedding-users',
   WEDDING_CONFIG: 'wedding-config',
   WEDDING_IMAGES: 'wedding-images',
   WEDDING_CATEGORIES: 'wedding-categories',

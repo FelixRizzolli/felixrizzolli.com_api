@@ -21,6 +21,7 @@ import { WeddingIssues } from '@/domains/wedding/collections/WeddingIssues';
 import { WeddingConfig } from '@/domains/wedding/globals/WeddingConfig';
 import { migrations } from '@/migrations';
 import { runSeeders } from '@/seed';
+import { WeddingUsers } from '@/domains/wedding/collections/WeddingUser';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -73,6 +74,7 @@ export default buildConfig({
     Roles,
     Permissions,
     // Wedding
+    WeddingUsers,
     WeddingImages,
     WeddingCategories,
     WeddingCategoryGroups,
@@ -102,7 +104,6 @@ export default buildConfig({
     } catch (err) {
       payload.logger.error('✘ Seeding failed on startup:');
       payload.logger.error(err);
-      // Do NOT process.exit here — let the server continue running
     }
   },
   sharp,

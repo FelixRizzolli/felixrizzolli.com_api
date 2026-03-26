@@ -64,12 +64,14 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    'wedding-users': WeddingUserAuthOperations;
   };
   blocks: {};
   collections: {
     users: User;
     roles: Role;
     permissions: Permission;
+    'wedding-users': WeddingUser;
     'wedding-images': WeddingImage;
     'wedding-categories': WeddingCategory;
     'wedding-category-groups': WeddingCategoryGroup;
@@ -84,6 +86,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     roles: RolesSelect<false> | RolesSelect<true>;
     permissions: PermissionsSelect<false> | PermissionsSelect<true>;
+    'wedding-users': WeddingUsersSelect<false> | WeddingUsersSelect<true>;
     'wedding-images': WeddingImagesSelect<false> | WeddingImagesSelect<true>;
     'wedding-categories': WeddingCategoriesSelect<false> | WeddingCategoriesSelect<true>;
     'wedding-category-groups': WeddingCategoryGroupsSelect<false> | WeddingCategoryGroupsSelect<true>;
@@ -107,7 +110,7 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | WeddingUser;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -143,6 +146,24 @@ export interface UserAuthOperations {
         username: string;
       };
 }
+export interface WeddingUserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
@@ -153,10 +174,6 @@ export interface User {
    * Assign one or more roles to this user. Permissions are derived from the assigned roles.
    */
   roles?: (number | Role)[] | null;
-  /**
-   * One-time invitation token for user registration. Generate and share with the user.
-   */
-  invitationToken?: string | null;
   updatedAt: string;
   createdAt: string;
   email?: string | null;
@@ -232,6 +249,32 @@ export interface Permission {
   ident: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-users".
+ */
+export interface WeddingUser {
+  id: number;
+  username: string;
+  /**
+   * Only the 'wedding-guest' role may be assigned to a Wedding User.
+   */
+  roles?: (number | Role)[] | null;
+  /**
+   * One-time invitation token for user registration. Generate and share with the user.
+   */
+  invitationToken: string;
+  settings?: {
+    language?: ('english' | 'deutsch' | 'italiano') | null;
+    gallery?: {
+      gridGap?: ('none' | 'small' | 'medium' | 'large') | null;
+      view?: ('default' | 'tiles' | 'masonry') | null;
+    };
+  };
+  updatedAt: string;
+  createdAt: string;
+  collection: 'wedding-users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -339,6 +382,10 @@ export interface PayloadLockedDocument {
         value: number | Permission;
       } | null)
     | ({
+        relationTo: 'wedding-users';
+        value: number | WeddingUser;
+      } | null)
+    | ({
         relationTo: 'wedding-images';
         value: number | WeddingImage;
       } | null)
@@ -355,10 +402,15 @@ export interface PayloadLockedDocument {
         value: number | WeddingIssue;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'wedding-users';
+        value: number | WeddingUser;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -368,10 +420,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'wedding-users';
+        value: number | WeddingUser;
+      };
   key?: string | null;
   value?:
     | {
@@ -402,7 +459,6 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   roles?: T;
-  invitationToken?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -440,6 +496,28 @@ export interface RolesSelect<T extends boolean = true> {
 export interface PermissionsSelect<T extends boolean = true> {
   name?: T;
   ident?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "wedding-users_select".
+ */
+export interface WeddingUsersSelect<T extends boolean = true> {
+  username?: T;
+  roles?: T;
+  invitationToken?: T;
+  settings?:
+    | T
+    | {
+        language?: T;
+        gallery?:
+          | T
+          | {
+              gridGap?: T;
+              view?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
 }

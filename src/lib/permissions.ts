@@ -49,6 +49,12 @@ export const Permissions = {
   WEDDING_CONFIG_READ: 'wedding.config:read',
   WEDDING_CONFIG_UPDATE: 'wedding.config:update',
 
+  // ── Wedding: User ──────────────────────────────────────────────────────────
+  WEDDING_USERS_CREATE: 'wedding.users:create',
+  WEDDING_USERS_READ: 'wedding.users:read',
+  WEDDING_USERS_UPDATE: 'wedding.users:update',
+  WEDDING_USERS_DELETE: 'wedding.users:delete',
+
   // ── Wedding: Images ────────────────────────────────────────────────────────
   WEDDING_IMAGES_CREATE: 'wedding.images:create',
   WEDDING_IMAGES_READ: 'wedding.images:read',
@@ -123,6 +129,15 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
     permissions: [Permissions.WEDDING_CONFIG_READ, Permissions.WEDDING_CONFIG_UPDATE],
   },
   {
+    label: 'Wedding – User',
+    permissions: [
+      Permissions.WEDDING_USERS_CREATE,
+      Permissions.WEDDING_USERS_READ,
+      Permissions.WEDDING_USERS_UPDATE,
+      Permissions.WEDDING_USERS_DELETE,
+    ],
+  },
+  {
     label: 'Wedding – Images',
     permissions: [
       Permissions.WEDDING_IMAGES_CREATE,
@@ -183,6 +198,12 @@ export const ROLE_PRESETS: RolePreset[] = [
     ident: 'wedding-editor',
     description: 'Full CRUD access to all Wedding resources.',
     permissions: [
+      Permissions.WEDDING_CONFIG_READ,
+      Permissions.WEDDING_CONFIG_UPDATE,
+      Permissions.WEDDING_USERS_CREATE,
+      Permissions.WEDDING_USERS_READ,
+      Permissions.WEDDING_USERS_UPDATE,
+      Permissions.WEDDING_USERS_DELETE,
       Permissions.WEDDING_IMAGES_CREATE,
       Permissions.WEDDING_IMAGES_READ,
       Permissions.WEDDING_IMAGES_UPDATE,
@@ -206,6 +227,8 @@ export const ROLE_PRESETS: RolePreset[] = [
     ident: 'wedding-guest',
     description: 'Read-only access to all Wedding resources.',
     permissions: [
+      Permissions.WEDDING_CONFIG_READ,
+      Permissions.WEDDING_USERS_READ,
       Permissions.WEDDING_IMAGES_READ,
       Permissions.WEDDING_CATEGORIES_READ,
       Permissions.WEDDING_CATEGORY_GROUPS_READ,
