@@ -172,7 +172,26 @@ export const WeddingUsers: CollectionConfig = {
             de: 'Beziehungen',
             it: 'Relazioni',
           },
-          fields: [],
+          fields: [
+            {
+              name: 'imagesInFogus',
+              type: 'join',
+              collection: CollectionSlug.WEDDING_IMAGES,
+              on: 'guestsInFocus',
+              admin: {
+                allowCreate: false,
+              },
+            },
+            {
+              name: 'imagesWithAppereance',
+              type: 'join',
+              collection: CollectionSlug.WEDDING_IMAGES,
+              on: 'guestsWithAppereance',
+              admin: {
+                allowCreate: false,
+              },
+            },
+          ],
         },
       ],
     },

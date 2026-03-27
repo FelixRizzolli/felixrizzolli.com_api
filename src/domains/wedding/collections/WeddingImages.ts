@@ -75,5 +75,40 @@ export const WeddingImages: CollectionConfig = {
         },
       },
     },
+    {
+      type: 'group',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'categories',
+          type: 'relationship',
+          relationTo: CollectionSlug.WEDDING_CATEGORIES,
+          hasMany: true,
+          admin: {
+            allowCreate: false,
+          },
+        },
+        {
+          name: 'guestsInFocus',
+          type: 'relationship',
+          relationTo: CollectionSlug.WEDDING_USERS,
+          hasMany: true,
+          admin: {
+            allowCreate: false,
+          },
+        },
+        {
+          name: 'guestsWithAppereance',
+          type: 'relationship',
+          relationTo: CollectionSlug.WEDDING_USERS,
+          hasMany: true,
+          admin: {
+            allowCreate: false,
+          },
+        },
+      ],
+    },
   ],
 };

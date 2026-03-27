@@ -81,7 +81,15 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'wedding-users': {
+      imagesInFogus: 'wedding-images';
+      imagesWithAppereance: 'wedding-images';
+    };
+    'wedding-categories': {
+      assignedImages: 'wedding-images';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     roles: RolesSelect<false> | RolesSelect<true>;
@@ -272,6 +280,16 @@ export interface WeddingUser {
       view?: ('default' | 'tiles' | 'masonry') | null;
     };
   };
+  imagesInFogus?: {
+    docs?: (number | WeddingImage)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  imagesWithAppereance?: {
+    docs?: (number | WeddingImage)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
   collection: 'wedding-users';
@@ -294,6 +312,9 @@ export interface WeddingImage {
    * The URL link to the image hosted on OneDrive.
    */
   onedriveLink?: string | null;
+  categories?: (number | WeddingCategory)[] | null;
+  guestsInFocus?: (number | WeddingUser)[] | null;
+  guestsWithAppereance?: (number | WeddingUser)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -303,6 +324,7 @@ export interface WeddingImage {
  */
 export interface WeddingCategory {
   id: number;
+  categoryGroup: number | WeddingCategoryGroup;
   /**
    * The name of the category, e.g. "Church", "Aperitivo", "Firefighters", etc.
    */
@@ -311,6 +333,11 @@ export interface WeddingCategory {
    * If checked, this category will be shown in the navigation menu.
    */
   isNavItem: boolean;
+  assignedImages?: {
+    docs?: (number | WeddingImage)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -518,6 +545,8 @@ export interface WeddingUsersSelect<T extends boolean = true> {
               view?: T;
             };
       };
+  imagesInFogus?: T;
+  imagesWithAppereance?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -529,6 +558,9 @@ export interface WeddingImagesSelect<T extends boolean = true> {
   ident?: T;
   cloudflareLink?: T;
   onedriveLink?: T;
+  categories?: T;
+  guestsInFocus?: T;
+  guestsWithAppereance?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -537,8 +569,10 @@ export interface WeddingImagesSelect<T extends boolean = true> {
  * via the `definition` "wedding-categories_select".
  */
 export interface WeddingCategoriesSelect<T extends boolean = true> {
+  categoryGroup?: T;
   name?: T;
   isNavItem?: T;
+  assignedImages?: T;
   updatedAt?: T;
   createdAt?: T;
 }
