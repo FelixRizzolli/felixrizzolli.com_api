@@ -26,26 +26,51 @@ export const seed = async (payload: Payload): Promise<void> => {
     });
 
     if (existingRoles.length > 0) {
-      // Always sync permissions so new entries in ROLE_PRESETS take effect on the next deploy
+      const roleId = existingRoles[0].id;
+      // Sync permissions + English name together
       await payload.update({
         collection: CollectionSlug.ROLES,
-        id: existingRoles[0].id,
-        data: { permissions: permissionIds },
+        id: roleId,
+        locale: 'en',
+        data: { name: preset.name.en, permissions: permissionIds },
         overrideAccess: true,
       });
+      // Sync remaining locales
+      for (const locale of ['de', 'it'] as const) {
+        await payload.update({
+          collection: CollectionSlug.ROLES,
+          id: roleId,
+          locale,
+          data: { name: preset.name[locale] },
+          overrideAccess: true,
+        });
+      }
       synced++;
       continue;
     }
 
-    await payload.create({
+    // Create with the default locale (en) including all non-localized fields
+    const createdRole = await payload.create({
       collection: CollectionSlug.ROLES,
+      locale: 'en',
       data: {
-        name: preset.name,
+        name: preset.name.en,
         ident: preset.ident,
         permissions: permissionIds,
       },
       overrideAccess: true,
     });
+
+    // Set names for the remaining locales
+    for (const locale of ['de', 'it'] as const) {
+      await payload.update({
+        collection: CollectionSlug.ROLES,
+        id: createdRole.id,
+        locale,
+        data: { name: preset.name[locale] },
+        overrideAccess: true,
+      });
+    }
 
     created++;
   }

@@ -18,23 +18,20 @@ export const Roles: CollectionConfig = {
     create: async ({ req, data }) => {
       const user = await getPopulatedUser(req);
       // Super-admins bypass the permission check but still cannot shadow seeder-managed idents.
-      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_CREATE))
-        return false;
+      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_CREATE)) return false;
       // Prevent shadowing a seeder-managed role ident (applies to everyone)
       return !(data?.ident && SEEDER_MANAGED_IDENTS.includes(data.ident));
     },
     read: requirePermission(Permissions.GLOBAL_ROLES_READ),
     update: async ({ req }) => {
       const user = await getPopulatedUser(req);
-      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_UPDATE))
-        return false;
+      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_UPDATE)) return false;
       // Seeder-managed roles are immutable — block updates for all users
       return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
     },
     delete: async ({ req }) => {
       const user = await getPopulatedUser(req);
-      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_DELETE))
-        return false;
+      if (!isSuperAdmin(user) && !access(user, Permissions.GLOBAL_ROLES_DELETE)) return false;
       // Seeder-managed roles are immutable — block deletes for all users
       return { ident: { not_in: SEEDER_MANAGED_IDENTS } };
     },
@@ -60,6 +57,7 @@ export const Roles: CollectionConfig = {
           it: 'Nome leggibile dall\'uomo per il ruolo, ad esempio "Admin del matrimonio"',
         },
       },
+      localized: true,
     },
     {
       name: 'ident',
@@ -95,6 +93,7 @@ export const Roles: CollectionConfig = {
           it: 'Descrizione opzionale per fornire più contesto su questo ruolo.',
         },
       },
+      localized: true,
     },
     {
       name: 'permissions',

@@ -179,8 +179,14 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
 // Role Presets  (used by the seeder to create default roles)
 // ─────────────────────────────────────────────────────────────────────────────
 
+export type LocalizedString = {
+  en: string;
+  de: string;
+  it: string;
+};
+
 export type RolePreset = {
-  name: string;
+  name: LocalizedString;
   ident: string;
   description: string;
   permissions: Permission[];
@@ -188,13 +194,21 @@ export type RolePreset = {
 
 export const ROLE_PRESETS: RolePreset[] = [
   {
-    name: 'Super Admin',
+    name: {
+      en: 'Super Admin',
+      de: 'Super Admin',
+      it: 'Super Admin',
+    },
     ident: 'super-admin',
     description: 'Unrestricted access to every resource.',
     permissions: ALL_PERMISSIONS,
   },
   {
-    name: 'Wedding Editor',
+    name: {
+      en: 'Wedding Editor',
+      de: 'Hochzeits-Editor',
+      it: 'Editor Matrimonio',
+    },
     ident: 'wedding-editor',
     description: 'Full CRUD access to all Wedding resources.',
     permissions: [
@@ -223,7 +237,11 @@ export const ROLE_PRESETS: RolePreset[] = [
     ],
   },
   {
-    name: 'Wedding Guest',
+    name: {
+      en: 'Wedding Guest',
+      de: 'Hochzeitsgast',
+      it: 'Ospite Matrimonio',
+    },
     ident: 'wedding-guest',
     description: 'Read-only access to all Wedding resources.',
     permissions: [
