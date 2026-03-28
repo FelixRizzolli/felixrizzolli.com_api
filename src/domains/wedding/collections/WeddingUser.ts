@@ -195,6 +195,36 @@ export const WeddingUsers: CollectionConfig = {
         },
       ],
     },
+    {
+      type: 'group',
+      admin: {
+        position: 'sidebar',
+      },
+      fields: [
+        {
+          name: 'categories',
+          type: 'relationship',
+          relationTo: CollectionSlug.WEDDING_CATEGORIES,
+          hasMany: true,
+          filterOptions: {
+            type: { equals: 'people' },
+          },
+          label: {
+            en: 'People Categories',
+            de: 'Personen-Kategorien',
+            it: 'Categorie persone',
+          },
+          admin: {
+            allowCreate: false,
+            description: {
+              en: 'Assign people categories to this wedding user.',
+              de: 'Weisen Sie diesem Hochzeitsgast Personen-Kategorien zu.',
+              it: 'Assegna categorie di persone a questo utente del matrimonio.',
+            },
+          },
+        },
+      ],
+    },
   ],
   timestamps: true,
 };

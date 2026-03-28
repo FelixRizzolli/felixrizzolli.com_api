@@ -28,6 +28,45 @@ export const WeddingCategories: CollectionConfig = {
           },
           fields: [
             {
+              name: 'type',
+              type: 'select',
+              required: true,
+              defaultValue: 'images',
+              access: {
+                update: () => false,
+              },
+              options: [
+                {
+                  label: {
+                    en: 'Images',
+                    de: 'Bilder',
+                    it: 'Immagini',
+                  },
+                  value: 'images',
+                },
+                {
+                  label: {
+                    en: 'People',
+                    de: 'Personen',
+                    it: 'Persone',
+                  },
+                  value: 'people',
+                },
+              ],
+              label: {
+                en: 'Type',
+                de: 'Typ',
+                it: 'Tipo',
+              },
+              admin: {
+                description: {
+                  en: 'The type of this category. "Images" categories can be assigned to images. "People" categories can be assigned to users. Cannot be changed after creation.',
+                  de: 'Der Typ dieser Kategorie. "Bilder"-Kategorien können Bildern zugeordnet werden. "Personen"-Kategorien können Benutzern zugeordnet werden. Kann nach der Erstellung nicht geändert werden.',
+                  it: 'Il tipo di questa categoria. Le categorie "Immagini" possono essere assegnate alle immagini. Le categorie "Persone" possono essere assegnate agli utenti. Non può essere modificato dopo la creazione.',
+                },
+              },
+            },
+            {
               name: 'categoryGroup',
               type: 'relationship',
               relationTo: CollectionSlug.WEDDING_CATEGORY_GROUPS,
@@ -98,6 +137,15 @@ export const WeddingCategories: CollectionConfig = {
               name: 'assignedImages',
               type: 'join',
               collection: CollectionSlug.WEDDING_IMAGES,
+              on: 'categories',
+              admin: {
+                allowCreate: false,
+              },
+            },
+            {
+              name: 'assignedUsers',
+              type: 'join',
+              collection: CollectionSlug.WEDDING_USERS,
               on: 'categories',
               admin: {
                 allowCreate: false,

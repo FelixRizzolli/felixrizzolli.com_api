@@ -88,6 +88,7 @@ export interface Config {
     };
     'wedding-categories': {
       assignedImages: 'wedding-images';
+      assignedUsers: 'wedding-users';
     };
   };
   collectionsSelect: {
@@ -290,6 +291,10 @@ export interface WeddingUser {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  /**
+   * Assign people categories to this wedding user.
+   */
+  categories?: (number | WeddingCategory)[] | null;
   updatedAt: string;
   createdAt: string;
   collection: 'wedding-users';
@@ -324,6 +329,10 @@ export interface WeddingImage {
  */
 export interface WeddingCategory {
   id: number;
+  /**
+   * The type of this category. "Images" categories can be assigned to images. "People" categories can be assigned to users. Cannot be changed after creation.
+   */
+  type: 'images' | 'people';
   categoryGroup: number | WeddingCategoryGroup;
   slug: string;
   /**
@@ -336,6 +345,11 @@ export interface WeddingCategory {
   isNavItem: boolean;
   assignedImages?: {
     docs?: (number | WeddingImage)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  assignedUsers?: {
+    docs?: (number | WeddingUser)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -549,6 +563,7 @@ export interface WeddingUsersSelect<T extends boolean = true> {
       };
   imagesInFogus?: T;
   imagesWithAppereance?: T;
+  categories?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -571,11 +586,13 @@ export interface WeddingImagesSelect<T extends boolean = true> {
  * via the `definition` "wedding-categories_select".
  */
 export interface WeddingCategoriesSelect<T extends boolean = true> {
+  type?: T;
   categoryGroup?: T;
   slug?: T;
   name?: T;
   isNavItem?: T;
   assignedImages?: T;
+  assignedUsers?: T;
   updatedAt?: T;
   createdAt?: T;
 }

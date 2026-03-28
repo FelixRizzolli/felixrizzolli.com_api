@@ -95,6 +95,9 @@ export const WeddingImages: CollectionConfig = {
           type: 'relationship',
           relationTo: CollectionSlug.WEDDING_CATEGORIES,
           hasMany: true,
+          filterOptions: {
+            type: { equals: 'images' },
+          },
           admin: {
             allowCreate: false,
           },
