@@ -15,7 +15,7 @@ export const WeddingImages: CollectionConfig = {
   admin: {
     useAsTitle: 'ident',
     group: CollectionGroup.WEDDING,
-    defaultColumns: ['ident', 'cloudflareLink', 'updatedAt'],
+    defaultColumns: ['ident', 'cdnLink', 'updatedAt'],
   },
   fields: [
     {
@@ -37,23 +37,23 @@ export const WeddingImages: CollectionConfig = {
       },
     },
     {
-      name: 'cloudflareLink',
+      name: 'cdnLink',
       type: 'text',
       required: false,
       unique: true,
       label: {
-        en: 'Cloudflare Link',
-        de: 'Cloudflare-Link',
-        it: 'Link di Cloudflare',
+        en: 'CDN Link',
+        de: 'CDN-Link',
+        it: 'Link di CDN',
       },
       admin: {
+        description: {
+          en: 'The URL link to the image hosted on the CDN (e.g. Cloudflare R2). Takes priority over the OneDrive link.',
+          de: 'Der URL-Link zum Bild, das auf dem CDN (z. B. Cloudflare R2) gehostet wird. Hat Vorrang vor dem OneDrive-Link.',
+          it: "L'URL del link all'immagine ospitata sul CDN (es. Cloudflare R2). Ha la priorità sul link OneDrive.",
+        },
         components: {
           Cell: '@/domains/wedding/components/WeddingImageCell#WeddingImageCell',
-        },
-        description: {
-          en: 'The URL link to the image hosted on Cloudflare.',
-          de: 'Der URL-Link zum Bild, das auf Cloudflare gehostet wird.',
-          it: "L'URL del link all'immagine ospitata su Cloudflare.",
         },
       },
     },

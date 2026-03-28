@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- * Custom Cell component for the `cloudflareLink` field in the WeddingImages
+ * Custom Cell component for the `cdnLink` field in the WeddingImages
  * collection.  Renders a small thumbnail when the URL is present; falls back
  * to an em-dash when it is empty.
  */

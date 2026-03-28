@@ -305,9 +305,9 @@ export interface WeddingImage {
    */
   ident: string;
   /**
-   * The URL link to the image hosted on Cloudflare.
+   * The URL link to the image hosted on the CDN (e.g. Cloudflare R2). Takes priority over the OneDrive link.
    */
-  cloudflareLink?: string | null;
+  cdnLink?: string | null;
   /**
    * The URL link to the image hosted on OneDrive.
    */
@@ -558,7 +558,7 @@ export interface WeddingUsersSelect<T extends boolean = true> {
  */
 export interface WeddingImagesSelect<T extends boolean = true> {
   ident?: T;
-  cloudflareLink?: T;
+  cdnLink?: T;
   onedriveLink?: T;
   categories?: T;
   guestsInFocus?: T;

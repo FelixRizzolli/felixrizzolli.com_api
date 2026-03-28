@@ -23,6 +23,7 @@ import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { InvitationTokenField as InvitationTokenField_c474cb03971f71981d0676fa4c39cef6 } from '@/domains/global/components/InvitationTokenField'
 import { WeddingImageCell as WeddingImageCell_197b8678141091e2c8cbc8a50e298339 } from '@/domains/wedding/components/WeddingImageCell'
+import { WeddingImagePreview as WeddingImagePreview_d59d4e92aecf9a2f79c69ec7f5aed7e0 } from '@/domains/wedding/components/WeddingImagePreview'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 export const importMap = {
@@ -51,5 +52,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/domains/global/components/InvitationTokenField#InvitationTokenField": InvitationTokenField_c474cb03971f71981d0676fa4c39cef6,
   "@/domains/wedding/components/WeddingImageCell#WeddingImageCell": WeddingImageCell_197b8678141091e2c8cbc8a50e298339,
+  "@/domains/wedding/components/WeddingImagePreview#WeddingImagePreview": WeddingImagePreview_d59d4e92aecf9a2f79c69ec7f5aed7e0,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

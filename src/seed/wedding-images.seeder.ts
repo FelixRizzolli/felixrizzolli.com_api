@@ -10,7 +10,7 @@ const WEDDING_PHOTOGRAPHER_TOTAL = Number(process.env.WEDDING_PHOTOGRAPHER_TOTAL
 
 interface GeneratedWeddingImage {
   ident: string;
-  cloudflareLink: string;
+  cdnLink: string;
 }
 
 export const seed = async (payload: Payload): Promise<void> => {
@@ -21,22 +21,22 @@ export const seed = async (payload: Payload): Promise<void> => {
   for (let i = 1; i <= WEDDING_FOTOBOX_TOTAL; i++) {
     const ident = `${WEDDING_FOTOBOX_PREFIX}-${i}`;
     const hash = crypto.createHash('sha256').update(ident).digest('hex');
-    const cloudflareLink = `${WEDDING_IMAGES_CDN}/${hash}.jpg`;
+    const cdnLink = `${WEDDING_IMAGES_CDN}/${hash}.jpg`;
 
     weddingImages.push({
       ident,
-      cloudflareLink,
+      cdnLink,
     });
   }
 
   for (let i = 1; i <= WEDDING_PHOTOGRAPHER_TOTAL; i++) {
     const ident = `${WEDDING_PHOTOGRAPHER_PREFIX}-${i}`;
     const hash = crypto.createHash('sha256').update(ident).digest('hex');
-    const cloudflareLink = `${WEDDING_IMAGES_CDN}/${hash}.jpg`;
+    const cdnLink = `${WEDDING_IMAGES_CDN}/${hash}.jpg`;
 
     weddingImages.push({
       ident,
-      cloudflareLink,
+      cdnLink,
     });
   }
 
@@ -52,7 +52,7 @@ export const seed = async (payload: Payload): Promise<void> => {
         collection: CollectionSlug.WEDDING_IMAGES,
         where: { ident: { equals: weddingImage.ident } },
         data: {
-          cloudflareLink: weddingImage.cloudflareLink,
+          cdnLink: weddingImage.cdnLink,
         },
       });
       payload.logger.info(`Wedding Image ${weddingImage.ident} updated successfully!`);
