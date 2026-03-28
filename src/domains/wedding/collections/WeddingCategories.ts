@@ -40,6 +40,16 @@ export const WeddingCategories: CollectionConfig = {
               },
             },
             {
+              name: 'slug',
+              type: 'text',
+              required: true,
+              label: {
+                en: 'Slug',
+                de: 'Slug',
+                it: 'Slug',
+              },
+            },
+            {
               name: 'name',
               type: 'text',
               required: true,
@@ -55,6 +65,7 @@ export const WeddingCategories: CollectionConfig = {
                   it: 'Il nome della categoria, es. "Chiesa", "Aperitivo", "Vigili del Fuoco", etc.',
                 },
               },
+              localized: true,
             },
             {
               name: 'isNavItem',

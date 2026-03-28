@@ -46,6 +46,27 @@ export default buildConfig({
     supportedLanguages: { en, de, it },
     fallbackLanguage: 'en',
   },
+  localization: {
+    locales: [
+      {
+        code: 'en',
+        label: 'English (English)',
+      },
+      {
+        code: 'de',
+        label: 'German (Deutsch)',
+        fallbackLocale: 'en',
+      },
+      {
+        code: 'it',
+        label: 'Italian (Italian)',
+        fallbackLocale: 'en',
+      },
+    ],
+    defaultLocale: 'en',
+    fallback: true,
+    defaultLocalePublishOption: 'active',
+  },
   admin: {
     user: CollectionSlug.USERS,
     importMap: {

@@ -18,6 +18,16 @@ export const WeddingCategoryGroups: CollectionConfig = {
   },
   fields: [
     {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      label: {
+        en: 'Slug',
+        de: 'Slug',
+        it: 'Slug',
+      },
+    },
+    {
       name: 'name',
       type: 'text',
       required: true,
@@ -33,6 +43,7 @@ export const WeddingCategoryGroups: CollectionConfig = {
           it: 'Nome del gruppo di categorie, ad esempio "Luogo", "Associazione", "Gruppo", ecc.',
         },
       },
+      localized: true,
     },
   ],
 };

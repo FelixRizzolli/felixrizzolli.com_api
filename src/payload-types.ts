@@ -107,14 +107,14 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'de' | 'it') | ('en' | 'de' | 'it')[];
   globals: {
     'wedding-config': WeddingConfig;
   };
   globalsSelect: {
     'wedding-config': WeddingConfigSelect<false> | WeddingConfigSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'de' | 'it';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -325,6 +325,7 @@ export interface WeddingImage {
 export interface WeddingCategory {
   id: number;
   categoryGroup: number | WeddingCategoryGroup;
+  slug: string;
   /**
    * The name of the category, e.g. "Church", "Aperitivo", "Firefighters", etc.
    */
@@ -347,6 +348,7 @@ export interface WeddingCategory {
  */
 export interface WeddingCategoryGroup {
   id: number;
+  slug: string;
   /**
    * Name of the category group, e.g. "Location", "Association", "Group", etc.
    */
@@ -570,6 +572,7 @@ export interface WeddingImagesSelect<T extends boolean = true> {
  */
 export interface WeddingCategoriesSelect<T extends boolean = true> {
   categoryGroup?: T;
+  slug?: T;
   name?: T;
   isNavItem?: T;
   assignedImages?: T;
@@ -581,6 +584,7 @@ export interface WeddingCategoriesSelect<T extends boolean = true> {
  * via the `definition` "wedding-category-groups_select".
  */
 export interface WeddingCategoryGroupsSelect<T extends boolean = true> {
+  slug?: T;
   name?: T;
   updatedAt?: T;
   createdAt?: T;
