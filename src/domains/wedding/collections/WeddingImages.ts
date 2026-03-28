@@ -37,6 +37,15 @@ export const WeddingImages: CollectionConfig = {
       },
     },
     {
+      name: 'imagePreview',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/domains/wedding/components/WeddingImagePreview#WeddingImagePreview',
+        },
+      },
+    },
+    {
       name: 'cdnLink',
       type: 'text',
       required: false,
