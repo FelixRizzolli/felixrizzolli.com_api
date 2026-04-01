@@ -26,7 +26,7 @@
     "@payloadcms/payload-cloud": "3.80.0",
     "@payloadcms/plugin-multi-tenant": "3.80.0",
     "@payloadcms/richtext-lexical": "3.80.0",
-    "@payloadcms/translations": "3.80.0",
+    "@payloadcms/translations": "3.81.0",
     "@payloadcms/ui": "3.80.0",
     "@tailwindcss/postcss": "^4.2.2",
     "cross-env": "10.1.0",
