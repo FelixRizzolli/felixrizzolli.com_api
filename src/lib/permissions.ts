@@ -39,12 +39,6 @@ export const Permissions = {
   GLOBAL_ROLES_UPDATE: 'global.roles:update',
   GLOBAL_ROLES_DELETE: 'global.roles:delete',
 
-  // ── Global: Tenants ────────────────────────────────────────────────────────
-  GLOBAL_TENANTS_CREATE: 'global.tenants:create',
-  GLOBAL_TENANTS_READ: 'global.tenants:read',
-  GLOBAL_TENANTS_UPDATE: 'global.tenants:update',
-  GLOBAL_TENANTS_DELETE: 'global.tenants:delete',
-
   // ── Wedding: Config ────────────────────────────────────────────────────────
   WEDDING_CONFIG_READ: 'wedding.config:read',
   WEDDING_CONFIG_UPDATE: 'wedding.config:update',
@@ -113,15 +107,6 @@ export const PERMISSION_GROUPS: PermissionGroup[] = [
       Permissions.GLOBAL_ROLES_READ,
       Permissions.GLOBAL_ROLES_UPDATE,
       Permissions.GLOBAL_ROLES_DELETE,
-    ],
-  },
-  {
-    label: 'Global – Tenants',
-    permissions: [
-      Permissions.GLOBAL_TENANTS_CREATE,
-      Permissions.GLOBAL_TENANTS_READ,
-      Permissions.GLOBAL_TENANTS_UPDATE,
-      Permissions.GLOBAL_TENANTS_DELETE,
     ],
   },
   {

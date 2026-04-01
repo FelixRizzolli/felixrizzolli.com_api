@@ -31,7 +31,6 @@ export const CollectionSlug = {
   USERS: 'users',
   ROLES: 'roles',
   PERMISSIONS: 'permissions',
-  TENANTS: 'tenants',
 
   // Wedding
   WEDDING_USERS: 'wedding-users',
